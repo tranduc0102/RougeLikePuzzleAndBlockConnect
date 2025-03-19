@@ -1,15 +1,14 @@
-using System;
+
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
+using DesignPattern.Obsever;
 using UnityEngine;
 
 public class PlayerStats : ActorStats
 {
-    protected override void HandleDead()
+    protected override IEnumerator HandleDead()
     {
-        Debug.Log("Post event lose");
+        //DoAnim
+        yield return new WaitForSeconds(timeDespawn);
+        ObserverManager<EventId>.PostEvent(EventId.Lose);
     }
-
-   
 }
