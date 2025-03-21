@@ -4,18 +4,23 @@ namespace BlockConnectGame
 {
     public class Slot : MonoBehaviour
     {
-        private Block _piece;
+        private Block _block;
 
-        public bool IsEmpty() => _piece == null;
-    
+        public bool IsEmpty() => _block == null;
+
         public void Release()
         {
-            _piece = null;
+            _block = null;
         }
 
-        public void SetPiece(Block current)
+        public void SetBlock(Block current)
         {
-            _piece = current;
+            _block = current;
+        }
+
+        public Block GetBlock()
+        {
+            return _block;
         }
     }
 }

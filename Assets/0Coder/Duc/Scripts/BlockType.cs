@@ -20,19 +20,40 @@ namespace BlockConnectGame
         }
         public void Use()
         {
-           //Post Event to Actor 
-           ObserverManager<Type>.PostEvent(type, value);
+           ObserverManager<EventID>.PostEvent(EventID.UpdateStatsPlayer, UpdateValueStats());
         }
         public void SetActiveCollider(bool active)
         {
             _collider.enabled = active;
         }
+
+        private Stats UpdateValueStats()
+        {
+            Stats stats = new Stats();
+            switch (type)
+            {
+                case Type.HealthPoint:
+                    stats.HealthPoint += value;
+                    break;
+                case Type.Armor:
+                    stats.Armor += value;
+                    break;
+                case Type.MagicalDamage:
+                    stats.MagicalDamage += value;
+                    break;
+                case Type.PhysicalDamage:
+                    stats.PhysicalDamage += value;
+                    break;
+            }
+
+            return stats;
+        }
     }
     public enum Type
     {
         HealthPoint,
-        AttackDamage,
-        PhepDamage,
-        Giap
+        PhysicalDamage,
+        MagicalDamage,
+        Armor
     }
 }

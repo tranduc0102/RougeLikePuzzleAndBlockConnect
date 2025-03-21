@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1483608858135699074}
   - component: {fileID: 4007728813541757147}
   - component: {fileID: 5307484544199185511}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: '[0, 2]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -175,7 +175,7 @@ GameObject:
   - component: {fileID: 345234296529437530}
   - component: {fileID: 8091113985462780708}
   - component: {fileID: 440615326296383268}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: '[2, 1]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -337,7 +337,7 @@ GameObject:
   - component: {fileID: 1038174256663296680}
   - component: {fileID: 322312486666296247}
   - component: {fileID: 8549029749090870412}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: '[1, 2]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -499,7 +499,7 @@ GameObject:
   - component: {fileID: 3658415516611058617}
   - component: {fileID: 1678325108029615579}
   - component: {fileID: 8009063409206949513}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: '[0, 0]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -661,7 +661,7 @@ GameObject:
   - component: {fileID: 3970875766600849820}
   - component: {fileID: 5516049437100253606}
   - component: {fileID: 2453796639514914782}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: '[1, 1] '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -823,7 +823,7 @@ GameObject:
   - component: {fileID: 2537638788590909608}
   - component: {fileID: 3824406820365999573}
   - component: {fileID: 6990649420149798439}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: '[0, 1]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -985,7 +985,7 @@ GameObject:
   - component: {fileID: 6889754908131650396}
   - component: {fileID: 5350924189387142677}
   - component: {fileID: 7550539177311972174}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: '[2, 0] '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1147,7 +1147,7 @@ GameObject:
   - component: {fileID: 4881923579483371369}
   - component: {fileID: 3262303677537655577}
   - component: {fileID: 3169279367946210009}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: '[1, 0] '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1309,7 +1309,7 @@ GameObject:
   - component: {fileID: 5026049210511457860}
   - component: {fileID: 9201269986037955240}
   - component: {fileID: 7951072081733741871}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: '[2, 2]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}

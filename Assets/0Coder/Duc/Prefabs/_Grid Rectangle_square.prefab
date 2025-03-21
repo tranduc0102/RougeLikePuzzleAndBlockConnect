@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4776291176075818913}
   - component: {fileID: 7913293866770816212}
   - component: {fileID: 7545269076016604535}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: '[1, 2]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -222,7 +222,7 @@ MonoBehaviour:
   - {fileID: 7545269076016604535}
   - {fileID: 2394704375827931956}
   _slot: {fileID: 0}
-  _sortingGroup: {fileID: 0}
+  _sortingGroup: {fileID: 5730787029806988841}
 --- !u!210 &5730787029806988841
 SortingGroup:
   m_ObjectHideFlags: 0
@@ -248,7 +248,7 @@ GameObject:
   - component: {fileID: 7746604390853579737}
   - component: {fileID: 1013339282782050702}
   - component: {fileID: 1436696705263023222}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: '[2, 1]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -410,7 +410,7 @@ GameObject:
   - component: {fileID: 1548153479287921819}
   - component: {fileID: 5229713247598187013}
   - component: {fileID: 7250208658211257168}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: '[1, 1] '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -572,7 +572,7 @@ GameObject:
   - component: {fileID: 1657780231707921566}
   - component: {fileID: 5899061705003202771}
   - component: {fileID: 2394704375827931956}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: '[2, 2]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}

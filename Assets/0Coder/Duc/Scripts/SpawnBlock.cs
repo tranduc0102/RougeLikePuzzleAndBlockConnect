@@ -9,6 +9,7 @@ namespace BlockConnectGame
     {
         [SerializeField] private List<Block> items;
         [SerializeField] private List<Slot> slots;
+        public List<Slot> Slots => slots;
 
         private void Start()
         {
@@ -36,8 +37,8 @@ namespace BlockConnectGame
                     var block = PoolingManager.Spawn(item, slot.transform.position,Quaternion.identity, slot.transform);
                     block.transform.localPosition = Vector3.zero;
                     block.OnSpawn(slot);
-                    slot.SetPiece(block);
-                }
+                    slot.SetBlock(block);
+                } 
             }
         }
     }
