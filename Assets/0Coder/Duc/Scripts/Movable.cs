@@ -95,8 +95,11 @@ namespace BlockConnectGame
         
         private void AnimationPlaced(Vector3 target, float duration, MyTiles tile = null)
         {
-            originPosition = transform.localPosition;
-            reSpawn = true;
+            if (!reSpawn)
+            {
+                originPosition = transform.localPosition;
+                reSpawn = true;
+            }
             transform.DOMove(target, duration).SetEase(Ease.Linear).OnComplete(delegate
             {
                if(tile)

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using DesignPattern;
 using DesignPattern.ObjectPool;
 using UnityEngine;
@@ -38,7 +39,19 @@ namespace BlockConnectGame
                     block.transform.localPosition = Vector3.zero;
                     block.OnSpawn(slot);
                     slot.SetBlock(block);
-                } 
+                }
+            }
+            var blocks = slots
+                .Where(s => s != null)
+                .Select(s => s.GetBlock())
+                .Where(b => b != null)
+                .ToList();
+
+            Debug.Log($"Số block đang kiểm tra: {blocks.Count}");
+
+            if (!BoardManager.Instance.CanPlaceAnyBlock(blocks))
+            {
+                Debug.LogError("Game Over: Không còn vị trí trống để đặt block!");
             }
         }
     }
