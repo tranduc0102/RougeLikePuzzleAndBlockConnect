@@ -70,12 +70,16 @@ namespace BlockConnectGame
 
         private void ClearRow(int row)
         {
-            float duration = 0.1f;
-            for (int j = 0; j < amountColum; j++)
+            float duration = 0.2f;
+            for (int j = 0; j < amountColum;j++)
             {
                 if (grid[row, j])
                 {
-                    grid[row, j].Child.transform.DOScale(Vector3.zero, duration * (j + 1));
+                    BlockType blockType = grid[row, j].Child;
+                    blockType.transform.DOScale(Vector3.zero, duration * (j + 1)).OnComplete(delegate
+                    {
+                        blockType.Movable.CheckDespawnAll();
+                    });
                     grid[row, j].Child.Use();
                     grid[row, j].IsEmpty = true;
                 }
@@ -84,12 +88,16 @@ namespace BlockConnectGame
 
         private void ClearColumn(int column)
         {
-            float duration = 0.1f;
-            for (int i = 0; i < amountRow; i++)
+            float duration = 0.2f;
+            for (int i = 0; i < amountRow; i++ )
             {
                 if (grid[i, column])
                 {
-                    grid[i, column].Child.transform.DOScale(Vector3.zero, duration * (i + 1));
+                    BlockType blockType = grid[i, column].Child;
+                    blockType.transform.DOScale(Vector3.zero, duration * (i + 1)).OnComplete(delegate
+                    {
+                        blockType.Movable.CheckDespawnAll();
+                    });
                     grid[i, column].Child.Use();
                     grid[i, column].IsEmpty = true;
                 }

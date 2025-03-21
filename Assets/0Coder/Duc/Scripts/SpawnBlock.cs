@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using DesignPattern;
+using DesignPattern.ObjectPool;
 using UnityEngine;
 using Random = UnityEngine.Random;
 namespace BlockConnectGame
@@ -32,7 +33,7 @@ namespace BlockConnectGame
                 {
                     var index = Random.Range(0, items.Count);
                     var item = items[index];
-                    var block = Instantiate(item, slot.transform);
+                    var block = PoolingManager.Spawn(item, slot.transform.position,Quaternion.identity, slot.transform);
                     block.transform.localPosition = Vector3.zero;
                     block.OnSpawn(slot);
                     slot.SetPiece(block);

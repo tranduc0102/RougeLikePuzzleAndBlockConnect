@@ -54,6 +54,7 @@ MonoBehaviour:
   listBlock:
   - {fileID: 6090794871284871331}
   _slot: {fileID: 0}
+  _sortingGroup: {fileID: -4718289653935332195}
 --- !u!210 &-4718289653935332195
 SortingGroup:
   m_ObjectHideFlags: 0
@@ -78,7 +79,7 @@ GameObject:
   - component: {fileID: 4806975432916325478}
   - component: {fileID: 2644829277244555795}
   - component: {fileID: 6090794871284871331}
-  - component: {fileID: 4821626908041644304}
+  - component: {fileID: 4389348967747179035}
   m_Layer: 0
   m_Name: '[0, 1]'
   m_TagString: Untagged
@@ -210,11 +211,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93c243ed5a990834490be83d3d0281d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
   _spriteRenderer: {fileID: 4806975432916325478}
   _collider: {fileID: 2644829277244555795}
-  _movable: {fileID: 4821626908041644304}
---- !u!114 &4821626908041644304
+  _movable: {fileID: 4389348967747179035}
+--- !u!114 &4389348967747179035
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

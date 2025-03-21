@@ -1,5 +1,8 @@
 using System.Collections.Generic;
+using System.Linq;
+using DesignPattern.ObjectPool;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace BlockConnectGame
 {
@@ -9,6 +12,13 @@ namespace BlockConnectGame
         [SerializeField] private List<BlockType> listBlock;
 
         [SerializeField] private Slot _slot;
+        [SerializeField] private SortingGroup _sortingGroup;
+
+        public SortingGroup SortingGroup
+        {
+            get => _sortingGroup;
+            set => _sortingGroup = value;
+        }
 
         private void OnEnable()
         {
@@ -20,6 +30,9 @@ namespace BlockConnectGame
             foreach (var block in listBlock)
             {
                 block.InitData(datas[Random.Range(0, datas.Count)]);
+                block.gameObject.SetActive(true);
+                block.SetActiveCollider(true);
+                block.transform.localScale = Vector3.one;
             }
         }
 
@@ -42,7 +55,6 @@ namespace BlockConnectGame
                 RaycastHit2D hit = tile.Movable.Hit();
                 if (hit.collider == null || !hit.collider.GetComponent<MyTiles>().IsEmpty)
                 {
-                    Debug.LogError($"{tile.name}: Không thể đặt lên lưới!");
                     return false;
                 }
             }
@@ -77,6 +89,14 @@ namespace BlockConnectGame
             else
             {
                 BackHomeAll();
+            }
+        }
+
+        public void CheckDespawnAll()
+        {
+            if (!listBlock.Any(blk => blk.gameObject.activeSelf))
+            {
+                PoolingManager.Despawn(this.gameObject);
             }
         }
     }

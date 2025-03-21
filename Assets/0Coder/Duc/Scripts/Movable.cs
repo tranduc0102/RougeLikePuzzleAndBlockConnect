@@ -15,6 +15,8 @@ namespace BlockConnectGame
         private Block block;
         private Transform _currentMovable;
         private Vector3 _homePosition;
+        private Vector3 originPosition;
+        private bool reSpawn = false;
 
         private void Start()
         {
@@ -25,11 +27,20 @@ namespace BlockConnectGame
           
         }
 
+        private void OnEnable()
+        {
+            if (reSpawn)
+            {
+                transform.localPosition = originPosition;
+            }
+        }
+
         #region Pointer
         
         public void OnMouseDown()
         {
             SetOffset(Input.mousePosition);
+            block.SortingGroup.sortingOrder = 100;
         }
         public void OnMouseDrag()
         {
@@ -39,6 +50,7 @@ namespace BlockConnectGame
         public void OnMouseUp()
         {
             block.OnPointerUp();
+            block.SortingGroup.sortingOrder = 10;
         }
 
         private void SetOffset(Vector3 position)
@@ -66,7 +78,7 @@ namespace BlockConnectGame
             target.z = 0f;
             _blockTile.SetActiveCollider(false);
             baseTile.IsEmpty = false;
-            baseTile.Child = transform.GetComponent<BlockType>();
+            baseTile.Child = _blockTile;
             AnimationPlaced(target, 0.3f, baseTile);
         }
 
@@ -83,13 +95,21 @@ namespace BlockConnectGame
         
         private void AnimationPlaced(Vector3 target, float duration, MyTiles tile = null)
         {
+            originPosition = transform.localPosition;
+            reSpawn = true;
             transform.DOMove(target, duration).SetEase(Ease.Linear).OnComplete(delegate
             {
                if(tile)
                {
-                   BoardManager.Instance.CheckGrid(tile.x, tile.y);
+                   BoardManager.Instance.CheckGrid(tile.x, tile.y); 
                }
             });
+        }
+
+        public void CheckDespawnAll()
+        {
+            gameObject.SetActive(false);
+            block.CheckDespawnAll();
         }
 
     }
