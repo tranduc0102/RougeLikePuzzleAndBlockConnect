@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6239ef2d1814538b89a2bbc1eab38a7, type: 3}
+  m_Name: DataAllBlock
+  m_EditorClassIdentifier: 
+  blocks:
+  - typeBlock: 0
+    colorBlock: {r: 0.014359593, g: 1, b: 0, a: 1}
+    valueBlock: 100
+  - typeBlock: 1
+    colorBlock: {r: 1, g: 1, b: 1, a: 1}
+    valueBlock: 20
+  - typeBlock: 2
+    colorBlock: {r: 1, g: 0, b: 0, a: 1}
+    valueBlock: 15
+  - typeBlock: 3
+    colorBlock: {r: 1, g: 0, b: 0.97662354, a: 1}
+    valueBlock: 20
+  moveSpeed: 0.1

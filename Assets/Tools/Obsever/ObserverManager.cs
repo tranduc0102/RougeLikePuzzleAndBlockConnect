@@ -6,6 +6,7 @@ namespace DesignPattern.Obsever
 {
     public class ObserverManager<T> : MonoBehaviour where T:Enum
     {
+<<<<<<< Updated upstream
         private static ObserverManager<T> _instance;
 
         public static ObserverManager<T> Instance
@@ -41,6 +42,9 @@ namespace DesignPattern.Obsever
             }
         }
     
+=======
+        private static Dictionary<T, Action<object>> _events = new Dictionary<T, Action<object>>();
+>>>>>>> Stashed changes
         //Đăng kí lắng nghe sự kiện
         public void RegisterEvent(T eventID,Action<object> callback)
         {
