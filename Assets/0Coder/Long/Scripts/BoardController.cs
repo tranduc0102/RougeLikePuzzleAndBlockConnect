@@ -1,14 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using UnityEngine;
 using DesignPattern.Obsever;
 using DG.Tweening;
+using Vector3 = UnityEngine.Vector3;
 
 public enum Gameplay
 {
     checkInsertBlock,
     moveToDefault,
-    blockIsUse
+    blockIsUse,
+    spawnBlock
 }
 
 public class BoardController : MonoBehaviour
@@ -17,19 +20,19 @@ public class BoardController : MonoBehaviour
     [SerializeField] private int columnNumber;
     [SerializeField] private float distanceBlock;
     [SerializeField] private GameObject gameObjectCell;
-    private Cell[ ,] cells;
+    private Transform[ ,] blocks;
     [SerializeField] private LayerMask layerMask;
     [SerializeField] private Vector3 sizeBoxCheck;
     
     private void Awake()
     {
+        blocks = new Transform[rowNumber, columnNumber];
         sizeBoxCheck = new Vector3(distanceBlock / 2f - 0.2f,  distanceBlock / 2f - 0.2f, 0f);
     }
 
     private void OnEnable()
     {
         ObserverManager<Gameplay>.RegisterEvent(Gameplay.checkInsertBlock, param => AddBlockOnCell((Transform) param));
-        cells = new Cell[rowNumber, columnNumber];
         CreateBoard();
     }
 
@@ -46,35 +49,9 @@ public class BoardController : MonoBehaviour
             {
                 GameObject newCell = Instantiate(gameObjectCell, transform);
                 newCell.name = $"Cell {i} : {j}";
-                Cell newCellScript = newCell.GetComponent<Cell>();
-                newCellScript.SetPosition(i * distanceBlock, j * distanceBlock);
-                cells[i, j] =  newCellScript;
+                newCell.transform.position = new Vector3(i * distanceBlock, j * distanceBlock, 0f);
             }
         }
-    }
-
-    private bool CheckRow(int row)
-    {
-        for (int i = 0; i < columnNumber; ++i)
-        {
-            if (cells[row, i].IsEmpty())
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-    
-    private bool CheckColumn(int column)
-    {
-        for (int i = 0; i < rowNumber; ++i)
-        {
-            if (cells[i, column].IsEmpty())
-            {
-                return false;
-            }
-        }
-        return true;
     }
 
     private void AddBlockOnCell(Transform target)
@@ -84,6 +61,8 @@ public class BoardController : MonoBehaviour
             Debug.Log("Adding block on cell");
             SetPositionBlockToCell(target);
             ObserverManager<Gameplay>.PostEvent(Gameplay.blockIsUse, target);
+            CheckRowAndColumn();
+            ObserverManager<Gameplay>.PostEvent(Gameplay.spawnBlock, 1);
         }
         else
         {
@@ -94,13 +73,12 @@ public class BoardController : MonoBehaviour
     private void SetPositionBlockToCell(Transform target)
     {
         int n = target.childCount;
-        Collider2D collider2D;
+        GameObject obj;
         for (int i = 0; i < n; ++i)
         {
-            collider2D = Physics2D.OverlapPoint(target.GetChild(i).position, layerMask, 0f);
-            target.GetChild(i).DOMove(collider2D.gameObject.transform.position, 0.2f);
-            // TODO: set cell.isempty = false
-            collider2D.gameObject.GetComponent<Cell>().SetIsEmpty(false);
+            obj = Physics2D.OverlapPoint(target.GetChild(i).position, layerMask, 0f).gameObject;
+            target.GetChild(i).DOMove(obj.transform.position, 0.2f);
+            blocks[(int)(obj.transform.position.x / distanceBlock), (int)(obj.transform.position.y / distanceBlock)] = target.GetChild(i);
         }
     }
     
@@ -120,13 +98,86 @@ public class BoardController : MonoBehaviour
     private bool CheckBlockAndCell(Transform target)
     {
         Collider2D collider2D = Physics2D.OverlapPoint(target.position, layerMask, 0f, 0f);
-        return collider2D != null && collider2D.gameObject.GetComponent<Cell>().IsEmpty();
+        return collider2D != null && blocks[(int) (collider2D.transform.position.x / distanceBlock), (int) (collider2D.transform.position.y / distanceBlock)] == null;
+    }
+    
+    private void CheckRowAndColumn()
+    {
+        List<(int, int)> eraseRowAndColumn = new List<(int, int)>();
+        for (int i = 0; i < rowNumber; ++i)
+        {
+            if (CheckRow(i))
+            {
+                eraseRowAndColumn.Add((i, -1));
+            }
+        }
+
+        for (int i = 0; i < columnNumber; ++i)
+        {
+            if (CheckColumn(i))
+            {
+                eraseRowAndColumn.Add((-1, i));
+            }
+        }
+        // TODO: Erase row and column
+        foreach ((int, int) child in eraseRowAndColumn)
+        {
+            if (child.Item1 != -1)
+            {
+                for (int i = 0; i < columnNumber; ++i)
+                {
+                    SetAnimationBlock(blocks[child.Item1, i]);
+                    blocks[child.Item1, i] = null;
+                }
+            }
+            else if (child.Item2 != -1)
+            {
+                for (int i = 0; i < rowNumber; ++i)
+                {
+                    SetAnimationBlock(blocks[i, child.Item2]);
+                    blocks[i, child.Item2] = null;
+                }
+            }
+            else
+            {
+                Debug.LogError("Error erase row and column");
+            }
+        }
     }
 
-    // TODO: Test va cham block va cell
-    // private void OnDrawGizmos()
-    // {
-    //     Gizmos.color = Color.red;
-    //     Gizmos.DrawWireCube(Vector3.zero, new Vector3(distanceBlock / 2f, distanceBlock / 2f, 0f));
-    // }
+    private void SetAnimationBlock(Transform tmp)
+    {
+        tmp.DOShakeScale(0.5f, 0.5f, 10, 90f, true, ShakeRandomnessMode.Full)
+            .OnComplete(() =>
+            {
+                tmp.DOScale(Vector3.zero, 0.5f)
+                    .SetEase(Ease.InExpo)
+                    .OnComplete(() => tmp.gameObject.SetActive(false));
+            });
+    }
+    
+    private bool CheckRow(int row)
+    {
+        for (int i = 0; i < columnNumber; ++i)
+        {
+            if (blocks[row, i] == null)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    private bool CheckColumn(int column)
+    {
+        for (int i = 0; i < rowNumber; ++i)
+        {
+            if (blocks[i, column] == null)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

@@ -1,5 +1,5 @@
 using System;
-
+using System.Collections;
 using UnityEngine;
 [Serializable]
 public struct Stats
@@ -17,10 +17,10 @@ public struct Stats
         Armor = armor;
     }
 }
-public class ActorStats : MonoBehaviour
+public abstract class ActorStats : MonoBehaviour
 {
     [SerializeField] protected Stats m_ActorStats;
-    
+    [SerializeField] protected float timeDespawn;
     
     
     public void AddStats(Stats stats)
@@ -30,12 +30,9 @@ public class ActorStats : MonoBehaviour
         m_ActorStats.MagicalDamage += stats.MagicalDamage;
         m_ActorStats.Armor += stats.Armor;
         
-        if(m_ActorStats.HealthPoint <= 0) HandleDead();
+        if(m_ActorStats.HealthPoint <= 0) StartCoroutine(HandleDead());
     }
 
-    protected virtual void HandleDead()
-    {
-        
-    }
-    
+    protected abstract IEnumerator HandleDead();
+
 }

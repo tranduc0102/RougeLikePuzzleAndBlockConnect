@@ -4,49 +4,16 @@ using UnityEngine;
 
 namespace DesignPattern.Obsever
 {
-    public class ObserverManager<T> : MonoBehaviour where T:Enum
+    public static class ObserverManager<T> where T:Enum
     {
-<<<<<<< Updated upstream
-        private static ObserverManager<T> _instance;
+      
 
-        public static ObserverManager<T> Instance
-        {
-            get
-            {
-                if (!_instance)
-                {
-                    _instance = FindObjectOfType<ObserverManager<T>>(true);
-                    if (!_instance)
-                    {
-                        GameObject newGameObject = new GameObject("EventDispatcher_ "+typeof(T).Name);
-                        _instance = newGameObject.AddComponent<ObserverManager<T>>();
-                    }
-                }
-
-                return _instance;
-            }
-        }
-
-        private Dictionary<T, Action<object>> _events = new Dictionary<T, Action<object>>();
-
-        //Singleton
-        private void Awake()
-        {
-            if (_instance && _instance != this)
-            {
-                Destroy(this);
-            }
-            else
-            {
-                _instance = this;
-            }
-        }
-    
-=======
         private static Dictionary<T, Action<object>> _events = new Dictionary<T, Action<object>>();
->>>>>>> Stashed changes
+
+       
+    
         //Đăng kí lắng nghe sự kiện
-        public void RegisterEvent(T eventID,Action<object> callback)
+        public static void RegisterEvent(T eventID,Action<object> callback)
         {
             if (callback == null)
             {
@@ -65,7 +32,7 @@ namespace DesignPattern.Obsever
             }
         }
         // không đăng kí lắng nghe nữa
-        public void RemoveEvent(T eventID,Action<object> callback)
+        public static void RemoveEvent(T eventID,Action<object> callback)
         {
             if (_events.ContainsKey(eventID))
             {
@@ -81,12 +48,12 @@ namespace DesignPattern.Obsever
             }
         }
 
-        public void RemoveAllEvent()
+        public static void RemoveAllEvent()
         {
             _events.Clear();
         }
         // Đăng sự kiện lên 
-        public void PostEvent(T eventID, object param = null)
+        public static void PostEvent(T eventID, object param = null)
         {
             if (!_events.ContainsKey(eventID))
             {

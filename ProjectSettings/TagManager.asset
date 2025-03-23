@@ -11,15 +11,10 @@ TagManager:
   - 
   - Water
   - UI
-<<<<<<< Updated upstream
-  - 
-  - 
-=======
-  - BaseGrid
+  - Cell
   - Block
->>>>>>> Stashed changes
-  - 
-  - 
+  - Player
+  - Enemy
   - 
   - 
   - 

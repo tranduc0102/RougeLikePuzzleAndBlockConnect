@@ -45,7 +45,6 @@ public class ABlock : MonoBehaviour
 
     private void InitBlock(int id)
     {
-        print("ga");
         typeBlock = dataAllBlock.blocks[id].typeBlock;
         spriteRenderer.color = dataAllBlock.blocks[id].colorBlock;
     }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using DesignPattern;
 using DesignPattern.ObjectPool;
+using DesignPattern.Obsever;
 using UnityEngine;
 using Random = UnityEngine.Random;
 public struct BlockStats
@@ -29,44 +30,35 @@ public class SpawnBlock : Singleton<SpawnBlock>
     private List<GameObject> slots;
     private int _maxSizeBlock;
     private float distanceBlock;
-
+    private int countBlock;
+    
     private void OnEnable()
     {
         _aBlock = dataSpawnBlock._aBlock;
         slots = dataSpawnBlock.slots;
         _maxSizeBlock = dataSpawnBlock._maxSizeBlock;
         distanceBlock = dataSpawnBlock.distanceBlock;
+        countBlock = slots.Count;
+        ObserverManager<Gameplay>.RegisterEvent(Gameplay.spawnBlock, param => StartSpawnBlock((int) param));
+    }
+
+    private void OnDisable()
+    {
+        ObserverManager<Gameplay>.RemoveEvent(Gameplay.spawnBlock, param => StartSpawnBlock((int) param));
     }
 
     private void Start()
     {
-        Check();
+        SpawnerBlock(countBlock);
     }
 
-    public void Check()
+    private void StartSpawnBlock(int amount)
     {
-        bool canSpawn = true;
-        // foreach (var slot in slots)
-        // {
-        //     if (!slot.IsEmpty())
-        //     {
-        //         canSpawn = false;
-        //         break;
-        //     }
-        // }
-
-        if (canSpawn)
+        countBlock -= amount;
+        if (countBlock <= 0)
         {
-            // foreach (var slot in slots)
-            // {
-            //     var index = Random.Range(0, items.Count);
-            //     var item = items[index];
-            //     var block = PoolingManager.Spawn(item, slot.transform.position,Quaternion.identity, slot.transform);
-            //     block.transform.localPosition = Vector3.zero;
-            //     block.OnSpawn(slot);
-            //     slot.SetPiece(block);
-            // }
-            SpawnerBlock(slots.Count);
+            countBlock = slots.Count;
+            SpawnerBlock(countBlock);
         }
     }
     
