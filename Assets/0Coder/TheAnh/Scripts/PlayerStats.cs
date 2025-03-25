@@ -29,8 +29,6 @@ public class PlayerStats : ActorStats
     {
         base.AddStats(stats);
         -- cntABlockErase;
-        // Handle add stats
-        
         if (cntABlockErase == 0)
         {
             -- cntABlockErase;
