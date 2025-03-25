@@ -4,7 +4,7 @@ using UnityEngine;
 public enum TypeBlock
 {
     health,
-    shield,
+    armor,
     physicDamage,
     magicDamage
 }

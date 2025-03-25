@@ -39,12 +39,12 @@ public class SpawnBlock : Singleton<SpawnBlock>
         _maxSizeBlock = dataSpawnBlock._maxSizeBlock;
         distanceBlock = dataSpawnBlock.distanceBlock;
         countBlock = slots.Count;
-        ObserverManager<Gameplay>.RegisterEvent(Gameplay.spawnBlock, param => StartSpawnBlock((int) param));
+        ObserverManager<Gameplay>.RegisterEvent(Gameplay.spawnBlock, param => StartSpawnBlock());
     }
 
     private void OnDisable()
     {
-        ObserverManager<Gameplay>.RemoveEvent(Gameplay.spawnBlock, param => StartSpawnBlock((int) param));
+        ObserverManager<Gameplay>.RemoveEvent(Gameplay.spawnBlock, param => StartSpawnBlock());
     }
 
     private void Start()
@@ -52,17 +52,12 @@ public class SpawnBlock : Singleton<SpawnBlock>
         SpawnerBlock(countBlock);
     }
 
-    private void StartSpawnBlock(int amount)
+    private void StartSpawnBlock()
     {
-        countBlock -= amount;
-        if (countBlock <= 0)
-        {
-            countBlock = slots.Count;
-            SpawnerBlock(countBlock);
-        }
+        SpawnerBlock(countBlock);
     }
     
-    protected List<BlockStats> SpawnerBlock(int n)
+    protected void SpawnerBlock(int n)
     {
         List<BlockStats> blocks = new List<BlockStats> {GetBlockStats()};
         CreateBlock(blocks[0], 0);
@@ -75,13 +70,12 @@ public class SpawnBlock : Singleton<SpawnBlock>
             }
             CreateBlock(blocks[i], i);
         }
-        // TODO: Spawn Block
-        Debug.LogWarning("SpawnBlock finished");
-        foreach (var block in blocks)
-        {
-            Debug.Log($"{block.height}, {block.width}, {block.index}");
-        }
-        return blocks;
+        // TODO: Log Spawn Block
+        // Debug.LogWarning("SpawnBlock finished");
+        // foreach (var block in blocks)
+        // {
+        //     Debug.Log($"{block.height}, {block.width}, {block.index}");
+        // }
     }
 
     protected bool checkBlock(List<BlockStats> blockStats)
@@ -97,7 +91,7 @@ public class SpawnBlock : Singleton<SpawnBlock>
         return true;
     }
 
-    protected GameObject CreateBlock(BlockStats blockStats, int? idPos = null)
+    protected void CreateBlock(BlockStats blockStats, int? idPos = null)
     {
         GameObject block = new GameObject() {name = "Block"};
         if (blockStats.block == null)
@@ -138,6 +132,7 @@ public class SpawnBlock : Singleton<SpawnBlock>
                     newBlock.transform.position += Vector3.right * (i + 1) * distanceBlock;
                 }
             }
+            ObserverManager<Gameplay>.PostEvent(Gameplay.addBlockDontUse, block.transform);
         }
         // change position child
         for (int i = 0; i < block.transform.childCount; ++i)
@@ -148,7 +143,9 @@ public class SpawnBlock : Singleton<SpawnBlock>
         {
             block.transform.position = slots[(int) idPos].transform.position;
         }
-        return block;
+        Vector3 newPos = block.transform.position;
+        newPos.z = -0.5f;
+        block.transform.position = newPos;
     }
 
     protected void SetTypeBlock(GameObject block)

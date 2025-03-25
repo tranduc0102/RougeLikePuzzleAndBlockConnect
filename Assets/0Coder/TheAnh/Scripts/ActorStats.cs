@@ -21,9 +21,8 @@ public abstract class ActorStats : MonoBehaviour
 {
     [SerializeField] protected Stats m_ActorStats;
     [SerializeField] protected float timeDespawn;
-    
-    
-    public void AddStats(Stats stats)
+
+    protected virtual void AddStats(Stats stats)
     {
         m_ActorStats.HealthPoint += stats.HealthPoint;
         m_ActorStats.PhysicalDamage += stats.PhysicalDamage;

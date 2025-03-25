@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections.Generic;
 using DesignPattern;
 using DesignPattern.Obsever;
@@ -15,6 +16,22 @@ public class GameManager : Singleton<GameManager>
 
     public EnemyStats EnemySelected;
 
+    private void OnEnable()
+    {
+        ObserverManager<EventID>.RegisterEvent(EventID.Lose, param => HandleGameOver());
+    }
+
+    private void OnDisable()
+    {
+        ObserverManager<EventID>.RemoveEvent(EventID.Lose, param => HandleGameOver());
+    }
+
+    private void HandleGameOver()
+    {
+        // TODO: Xu ly game over
+        Debug.LogWarning("Game Over");
+    }
+    
     private void Start()
     {
         //When finish spawn way
@@ -83,7 +100,9 @@ public enum EventID
 {
     Win,
     Lose,
+    SendCntBlockErase,
     UpdateStatsPlayer,
+    PlayerAttackEnemy,
     SpawnNextWay,
     OnCompleteSpawnWay
 }
