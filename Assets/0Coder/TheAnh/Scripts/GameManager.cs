@@ -6,8 +6,26 @@ using DesignPattern.Obsever;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+public enum GameTurn
+{
+    EnemyTurn,
+    PlayerTurn
+}
+
+public enum EventID
+{
+    Win,
+    Lose,
+    SendCntBlockErase,
+    UpdateStatsPlayer,
+    SpawnNextWay,
+    OnCompleteSpawnWay
+}
+
 public class GameManager : Singleton<GameManager>
 {
+    public GameTurn gameTurn;
+    
     private int currentLevel = 0;
     [SerializeField] private GameTurn m_CurrentTurn;
 
@@ -18,6 +36,7 @@ public class GameManager : Singleton<GameManager>
 
     private void OnEnable()
     {
+        gameTurn = GameTurn.PlayerTurn;
         ObserverManager<EventID>.RegisterEvent(EventID.Lose, param => HandleGameOver());
     }
 
@@ -55,10 +74,8 @@ public class GameManager : Singleton<GameManager>
         if (m_EnemyTracker == null) m_EnemyTracker = new List<EnemyStats>();
         m_EnemyTracker.Clear();
         
-        ObserverManager<EventID>.PostEvent(EventID.SpawnNextWay);
-
-        
-        
+        // TODO: Fix ham nay sau
+        // ObserverManager<EventID>.PostEvent(EventID.SpawnNextWay);
     }
     private void SelectRandomEnemy()
     {
@@ -86,23 +103,4 @@ public class GameManager : Singleton<GameManager>
         m_EnemyTracker.Remove(enemy);
         if(enemy == EnemySelected) SelectRandomEnemy();
     }
-
-   
-    
-}
-public enum GameTurn
-{
-    EnemyTurn,
-    PlayerTurn
-}
-
-public enum EventID
-{
-    Win,
-    Lose,
-    SendCntBlockErase,
-    UpdateStatsPlayer,
-    PlayerAttackEnemy,
-    SpawnNextWay,
-    OnCompleteSpawnWay
 }

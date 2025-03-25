@@ -94,6 +94,7 @@ public class SpawnBlock : Singleton<SpawnBlock>
     protected void CreateBlock(BlockStats blockStats, int? idPos = null)
     {
         GameObject block = new GameObject() {name = "Block"};
+        block.transform.SetParent(transform);
         if (blockStats.block == null)
         {
             for (int i = 0; i < blockStats.height; ++i)

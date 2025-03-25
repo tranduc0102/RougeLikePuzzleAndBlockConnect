@@ -200,7 +200,7 @@ public class BoardManager : MonoBehaviour
         }
         List<Transform> removeRowAndColumn = new List<Transform>();
         // TODO: Erase row and column
-        // TODO: Add block add stats
+        // TODO: Add block ad stats
         foreach ((int, int) child in eraseRowAndColumn)
         {
             if (child.Item1 != -1)

@@ -21,6 +21,7 @@ public abstract class ActorStats : MonoBehaviour
 {
     [SerializeField] protected Stats m_ActorStats;
     [SerializeField] protected float timeDespawn;
+    [SerializeField] protected Animator animator;
 
     protected virtual void AddStats(Stats stats)
     {
@@ -29,7 +30,11 @@ public abstract class ActorStats : MonoBehaviour
         m_ActorStats.MagicalDamage += stats.MagicalDamage;
         m_ActorStats.Armor += stats.Armor;
         
-        if(m_ActorStats.HealthPoint <= 0) StartCoroutine(HandleDead());
+        if (m_ActorStats.HealthPoint <= 0)
+        {
+            m_ActorStats.HealthPoint = 0;
+            StartCoroutine(HandleDead());
+        }
     }
 
     protected abstract IEnumerator HandleDead();

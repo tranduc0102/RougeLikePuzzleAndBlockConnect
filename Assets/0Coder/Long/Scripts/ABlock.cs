@@ -104,9 +104,12 @@ public class ABlock : MonoBehaviour
 
     private void OnMouseDrag()
     {
-        if (isUse == false)
+        if (GameManager.Instance.gameTurn == GameTurn.PlayerTurn)
         {
-            Move(Input.mousePosition);
+            if (isUse == false)
+            {
+                Move(Input.mousePosition);
+            }
         }
     }
     private void OnMouseUp()
