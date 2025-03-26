@@ -30,10 +30,10 @@ namespace DesignPattern.ObjectPool
             return _pools[prefab.GetInstanceID()].Spawn(position, quaternion);
         }
 
-        public static T Spawn<T>(T prefab, Vector3 positon, Quaternion quaternion) where T : Component
+        public static T Spawn<T>(T prefab, Vector3 positon, Quaternion quaternion, Transform parent) where T : Component
         {
             Init(prefab.gameObject);
-            return _pools[prefab.GetInstanceID()].Spawn<T>(positon, quaternion);
+            return _pools[prefab.gameObject.GetInstanceID()].Spawn<T>(positon, quaternion, parent);
         }
 
         public static void Despawn(GameObject gameObject, UnityAction callback = null)
@@ -74,7 +74,7 @@ namespace DesignPattern.ObjectPool
             ObjectIDs = new HashSet<int>();
         }
 
-        public GameObject Spawn( Vector3 position, Quaternion quaternion)
+        public GameObject Spawn( Vector3 position, Quaternion quaternion, Transform parent = null)
         {
             while (true)
             {
@@ -95,13 +95,14 @@ namespace DesignPattern.ObjectPool
                 }
                 newObject.SetActive(true);
                 newObject.transform.SetPositionAndRotation(position,quaternion);
+                newObject.transform.SetParent(parent);
                 return newObject;
             }
         }
 
-        public T Spawn<T>(Vector3 position, Quaternion quaternion)
+        public T Spawn<T>(Vector3 position, Quaternion quaternion, Transform parent = null)
         {
-            return Spawn(position, quaternion).GetComponent<T>();
+            return Spawn(position, quaternion, parent).GetComponent<T>();
         }
 
         public void Despawn(GameObject gameObject)
