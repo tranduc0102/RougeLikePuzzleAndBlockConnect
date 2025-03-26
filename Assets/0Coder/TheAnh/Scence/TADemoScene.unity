@@ -335,10 +335,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1583094197}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bfdc7088edbca4e49ae23dd81f4fe548, type: 3}
+  m_Script: {fileID: 11500000, guid: 02c159401b184c9e83cd75766b887a12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EnemyPrefab: {fileID: 4104379046027148481, guid: ae9bb38fb4d2a6b42b7d492dd2b26f44, type: 3}
+  m_EnemyPrefab: {fileID: 0}
 --- !u!114 &1583094199
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -351,6 +351,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10763774f32c1d94ebdda14841cc4fdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameTurn: 0
   m_CurrentTurn: 0
   m_EnemyTracker: []
   EnemySelected: {fileID: 0}
