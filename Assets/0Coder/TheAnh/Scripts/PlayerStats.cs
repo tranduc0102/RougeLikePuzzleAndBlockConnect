@@ -67,6 +67,7 @@ public class PlayerStats : ActorStats
     {
         animator.SetTrigger("Attack");
         ObserverManager<GameTurn>.PostEvent(GameTurn.EnemyTurn, stats);
+        
     }
 
     protected override IEnumerator HandleDead()
