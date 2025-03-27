@@ -37,18 +37,26 @@ public class GameManager : Singleton<GameManager>
     private void OnEnable()
     {
         gameTurn = GameTurn.PlayerTurn;
-        ObserverManager<EventID>.RegisterEvent(EventID.Lose, param => HandleGameOver());
+        ObserverManager<EventID>.RegisterEvent(EventID.Lose, _ => HandleGameOver());
+        ObserverManager<EventID>.RegisterEvent(EventID.Win, _ => HandleWin());
     }
 
     private void OnDisable()
     {
-        ObserverManager<EventID>.RemoveEvent(EventID.Lose, param => HandleGameOver());
+        ObserverManager<EventID>.RemoveEvent(EventID.Lose, _ => HandleGameOver());
+        ObserverManager<EventID>.RemoveEvent(EventID.Win, _ => HandleWin());
     }
 
     private void HandleGameOver()
     {
         // TODO: Xu ly game over
         Debug.LogWarning("Game Over");
+    }
+
+    private void HandleWin()
+    {
+        PlayerPrefs.SetInt("IsLevelCompleted" + currentLevel.ToString(),1);
+        PlayerPrefs.Save();
     }
     
     private void Start()
