@@ -2633,6 +2633,55 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1519091026
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1519091028}
+  - component: {fileID: 1519091029}
+  m_Layer: 0
+  m_Name: EffectManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1519091028
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1519091026}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1519091029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1519091026}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75992bd23351c584797502d6f43050b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectSources:
+  - Name: HorizontalCollect
+    m_EffectPrefab: {fileID: 1934676079690092105, guid: 1a2507ab717d1a54fbafdeafdd48013b, type: 3}
+  - Name: VerticalCollect
+    m_EffectPrefab: {fileID: 408987998160232755, guid: 6b1098d4d550034489782a67d2add934, type: 3}
 --- !u!1 &1583094197
 GameObject:
   m_ObjectHideFlags: 0
@@ -3637,3 +3686,4 @@ SceneRoots:
   - {fileID: 165924063}
   - {fileID: 1316975971}
   - {fileID: 516731400}
+  - {fileID: 1519091028}
