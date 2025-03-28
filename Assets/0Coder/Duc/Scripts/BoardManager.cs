@@ -13,7 +13,7 @@ namespace BlockConnectGame
         [SerializeField] private int amountColum, amountRow;
         private MyTiles[,] grid;
 
-        private void Start()
+        private void OnEnable()
         {
             grid = new MyTiles[amountRow, amountColum];
             SpawnBoardGame();
@@ -75,13 +75,13 @@ namespace BlockConnectGame
             {
                 if (grid[row, j])
                 {
+                    grid[row, j].IsEmpty = true;
                     BlockType blockType = grid[row, j].Child;
                     blockType.transform.DOScale(Vector3.zero, duration * (j + 1)).OnComplete(delegate
                     {
                         blockType.Movable.CheckDespawnAll();
                     });
                     grid[row, j].Child.Use();
-                    grid[row, j].IsEmpty = true;
                 }
             }
         }
@@ -93,15 +93,57 @@ namespace BlockConnectGame
             {
                 if (grid[i, column])
                 {
+                    grid[i, column].IsEmpty = true;
                     BlockType blockType = grid[i, column].Child;
                     blockType.transform.DOScale(Vector3.zero, duration * (i + 1)).OnComplete(delegate
                     {
                         blockType.Movable.CheckDespawnAll();
                     });
                     grid[i, column].Child.Use();
-                    grid[i, column].IsEmpty = true;
                 }
             }
         }
+        public bool CanPlaceAnyBlock(List<Block> blocks)
+        {
+            foreach (var block in blocks)
+            {
+                if (CanPlaceBlock(block)) return true;
+            }
+            return false;
+        }
+
+        private bool CanPlaceBlock(Block block)
+        {
+            foreach (var tile in grid)
+            {
+                if (tile.IsEmpty && CanFitBlockAt(block, tile.x, tile.y))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private bool CanFitBlockAt(Block block, int startX, int startY)
+        {
+            foreach (var piece in block.GetTiles())
+            {
+                int targetX = startX + piece.x;
+                int targetY = startY + piece.y;
+
+                if (!IsValidTile(targetX, targetY) || !grid[targetX, targetY].IsEmpty)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private bool IsValidTile(int x, int y)
+        {
+            return x >= 0 && x < amountRow && y >= 0 && y < amountColum;
+        }
+
     }
 }
