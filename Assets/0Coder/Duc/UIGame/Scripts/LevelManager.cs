@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DesignPattern;
 using UnityEngine;
 namespace UIGame
@@ -6,14 +7,6 @@ namespace UIGame
     public class LevelManager : Singleton<LevelManager>
     {
         private const string LevelKey = "Level_";
-
-        public static LevelManager Instance;
-
-        private void Awake()
-        {
-            if (Instance == null) Instance = this;
-        }
-
         public int GetLevelStatus(int levelId)
         {
             return PlayerPrefs.GetInt(LevelKey + levelId, levelId == 1 ? 1 : 0);
