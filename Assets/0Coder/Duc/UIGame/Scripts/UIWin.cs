@@ -54,6 +54,7 @@ namespace UIGame
         private void Start()
         {
             originLabel = _label.localPosition.y;
+            ShowDisplay(true);
         }
 
         private void LoadPath()
