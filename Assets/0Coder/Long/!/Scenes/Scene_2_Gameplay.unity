@@ -203,7 +203,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 606899235}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ede189e92316bbb458b37f1a3e9b2fb7, type: 3}
+  m_Script: {fileID: 11500000, guid: 50c02e66490e4e04b9629db6ab4ca010, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dataSpawnBlock: {fileID: 11400000, guid: f88387e0f112c3e4f96edc02fef08e3b, type: 2}
@@ -499,6 +499,7 @@ GameObject:
   - component: {fileID: 1672058104}
   - component: {fileID: 1672058103}
   - component: {fileID: 1672058102}
+  - component: {fileID: 1672058105}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -580,6 +581,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1672058105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1672058101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4b62811626b9aa46ae5da507c8ffe22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  distance: 17.5
 --- !u!1 &1690501919
 GameObject:
   m_ObjectHideFlags: 0
@@ -1345,7 +1360,7 @@ GameObject:
   - component: {fileID: 424649599462487067}
   m_Layer: 0
   m_Name: DogPolyart
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
