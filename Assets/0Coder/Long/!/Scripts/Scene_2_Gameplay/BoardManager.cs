@@ -177,7 +177,7 @@ public class BoardManager : MonoBehaviour
     private bool CheckBlockAndCell(Transform block)
     {
         Collider2D collider2D = Physics2D.OverlapPoint(block.position, layerMask, 0f, 0f);
-        return collider2D != null && blocks[(int) (collider2D.transform.position.x / distanceBlock)][(int) (collider2D.transform.position.y / distanceBlock)] == null;
+        return collider2D != null && blocks[(int) (collider2D.transform.localPosition.x / distanceBlock)][(int) (collider2D.transform.position.y / distanceBlock)] == null;
     }
     
     private void CheckRowAndColumn()
