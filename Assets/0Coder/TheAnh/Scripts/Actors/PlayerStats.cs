@@ -2,26 +2,80 @@ using System;
 using System.Collections;
 using System.Data;
 using DesignPattern.Obsever;
+using DG.Tweening;
 using UnityEngine;
 
 public class PlayerStats : ActorStats
 {
-    private int cntABlockErase;
+    [SerializeField] private DataPlayer _dataPlayer;
+    [SerializeField] private float distancePlayerRun;
+    [SerializeField] private float timePlayerRun;
+    [SerializeField] private int cntABlockErase;
+
+    private void Awake()
+    {
+        SetupDataPlayer();
+    }
+
     protected void OnEnable()
     {
-        animator = gameObject.GetComponent<Animator>();
+        ObserverManager<EventID>.RegisterEvent(EventID.TurnManager, param => TurnManager((GameTurn) param));
+        
         cntABlockErase = -1;
         ObserverManager<EventID>.RegisterEvent(EventID.UpdateStatsPlayer, param => AddStats((Stats) param));
         ObserverManager<EventID>.RegisterEvent(EventID.SendCntBlockErase, param => ChangeCntABlockErase((int) param));
         ObserverManager<GameTurn>.RegisterEvent(GameTurn.PlayerTurn, param => AddStats((Stats) param));
     }
-
     protected void OnDisable()
     {
+        ObserverManager<EventID>.RemoveEvent(EventID.TurnManager, param => TurnManager((GameTurn) param));
+        
         ObserverManager<EventID>.RemoveEvent(EventID.UpdateStatsPlayer, param => AddStats((Stats) param));
         ObserverManager<EventID>.RemoveEvent(EventID.SendCntBlockErase, param => ChangeCntABlockErase((int) param));
         ObserverManager<GameTurn>.RemoveEvent(GameTurn.PlayerTurn, param => AddStats((Stats) param));
     }
+    private void SetupDataPlayer()
+    {
+        _dataPlayer = Resources.Load<DataPlayer>("ScriptTableObject/DataPlayer");
+        m_ActorStats = _dataPlayer.stats;
+        distancePlayerRun = _dataPlayer.distancePlayerRun;
+        timePlayerRun = _dataPlayer.timePlayerRun;
+        animator = gameObject.GetComponent<Animator>();
+    }
+    private void TurnManager(GameTurn turn)
+    {
+        switch (turn)
+        {
+            case GameTurn.EmptyTimeTurn:
+                PlayerRun();
+                break;
+            case GameTurn.PlayerTurn:
+
+                break;
+            case GameTurn.EnemyTurn:
+                
+                break;
+            default:
+                Debug.LogError($"{this.GetType().Name}: Error TurnManager");
+                break;
+        }
+    }
+    private void PlayerRun()
+    {
+        StartCoroutine(PlayerRunning());
+    }
+
+    private IEnumerator PlayerRunning()
+    {
+        transform.DOMoveX(transform.position.x + distancePlayerRun, timePlayerRun).SetEase(Ease.Linear);
+        animator.SetBool("Run", true);
+        ObserverManager<EventID>.PostEvent(EventID.PlayerMove, (distancePlayerRun, timePlayerRun));
+        yield return new WaitForSeconds(timePlayerRun);
+        animator.SetBool("Run", false);
+        ObserverManager<EventID>.PostEvent(EventID.SpawnNextWay);
+        GameManager.Instance.ChangeTurn(GameTurn.PlayerTurn);
+    }
+    
     
     private void ChangeCntABlockErase(int newCntABlockErase)
     {
@@ -30,7 +84,7 @@ public class PlayerStats : ActorStats
 
     protected override void AddStats(Stats stats)
     {
-        if (GameManager.Instance.gameTurn == GameTurn.PlayerTurn)
+        if (GameManager.Instance._GameTurn == GameTurn.PlayerTurn)
         {
             -- cntABlockErase;
             if (cntABlockErase == 0)
@@ -55,11 +109,11 @@ public class PlayerStats : ActorStats
                 isAttack.Armor = m_ActorStats.Armor * -1;
                 isAttack.HealthPoint = stats.MagicalDamage + stats.PhysicalDamage + isAttack.Armor;
             }
-            print(stats.MagicalDamage + stats.PhysicalDamage);
-            print(isAttack.HealthPoint);
-            print(isAttack.Armor);
+            // print(stats.MagicalDamage + stats.PhysicalDamage);
+            // print(isAttack.HealthPoint);
+            // print(isAttack.Armor);
             base.AddStats(isAttack);
-            GameManager.Instance.gameTurn = GameTurn.PlayerTurn;
+            GameManager.Instance._GameTurn = GameTurn.PlayerTurn;
         }
     }
     

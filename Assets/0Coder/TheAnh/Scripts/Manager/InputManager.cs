@@ -10,16 +10,16 @@ public class InputManager : Singleton<InputManager>
     private void Start()
     {
         //demo spawn
-        ObserverManager<EventID>.RegisterEvent(EventID.SpawnNextWay, param =>
-        {
-            for (int i = 0; i <= 3; ++i)
-            {
-                EnemyStats enemy = Instantiate(m_EnemyPrefab, new Vector3(2 * i, 0, 0), Quaternion.identity).GetComponent<EnemyStats>();
-                if(enemy != null) GameManager.Instance.HandleAddEnemy(enemy);
-            }
-            //if spawn finish post event
-            ObserverManager<EventID>.PostEvent(EventID.OnCompleteSpawnWay);
-        });
+        // ObserverManager<EventID>.RegisterEvent(EventID.SpawnNextWay, param =>
+        // {
+        //     for (int i = 0; i <= 3; ++i)
+        //     {
+        //         EnemyStats enemy = Instantiate(m_EnemyPrefab, new Vector3(2 * i, 0, 0), Quaternion.identity).GetComponent<EnemyStats>();
+        //         if(enemy != null) GameManager.Instance.HandleAddEnemy(enemy);
+        //     }
+        //     //if spawn finish post event
+        //     ObserverManager<EventID>.PostEvent(EventID.OnCompleteSpawnWay);
+        // });
     }
 
     private void Update()

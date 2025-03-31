@@ -11,6 +11,7 @@ public class EnemyData : ScriptableObject
 [Serializable]
 public class EnemyParam
 {
+    public GameObject EnemyPrefab;
     public string EnemyName;
     public float HealthPoint;
     public float PhysicalDamage;

@@ -23,9 +23,9 @@ public class EnemyStats : ActorStats
 
     protected override void AddStats(Stats stats)
     {
-        if (GameManager.Instance.gameTurn == GameTurn.PlayerTurn)
+        if (GameManager.Instance._GameTurn == GameTurn.PlayerTurn)
         {
-            GameManager.Instance.gameTurn = GameTurn.EnemyTurn;
+            GameManager.Instance._GameTurn = GameTurn.EnemyTurn;
             animator.SetTrigger("GetHit");
             Stats isAttack = new Stats();
             if ((stats.MagicalDamage + stats.PhysicalDamage) * -1 <= m_ActorStats.Armor)

@@ -4,29 +4,33 @@ using System.Collections.Generic;
 using DesignPattern;
 using DesignPattern.Obsever;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public enum GameTurn
 {
     EnemyTurn,
-    PlayerTurn
+    PlayerTurn,
+    EmptyTimeTurn
 }
 
 public enum EventID
 {
+    TurnManager,
     Win,
     Lose,
     SendCntBlockErase,
     UpdateStatsPlayer,
     SpawnNextWay,
-    OnCompleteSpawnWay
+    OnCompleteSpawnWay,
+    PlayerMove
 }
 
 public class GameManager : Singleton<GameManager>
 {
-    public GameTurn gameTurn;
+    [FormerlySerializedAs("gameTurn")] public GameTurn _GameTurn;
+    public int currentLevel = 0;
     
-    private int currentLevel = 0;
     [SerializeField] private GameTurn m_CurrentTurn;
 
     [Header("Manage enemy")] 
@@ -36,15 +40,46 @@ public class GameManager : Singleton<GameManager>
 
     private void OnEnable()
     {
-        gameTurn = GameTurn.PlayerTurn;
         ObserverManager<EventID>.RegisterEvent(EventID.Lose, _ => HandleGameOver());
         ObserverManager<EventID>.RegisterEvent(EventID.Win, _ => HandleWin());
     }
-
     private void OnDisable()
     {
         ObserverManager<EventID>.RemoveEvent(EventID.Lose, _ => HandleGameOver());
         ObserverManager<EventID>.RemoveEvent(EventID.Win, _ => HandleWin());
+    }
+    private void Start()
+    {
+        ChangeTurn(GameTurn.EmptyTimeTurn);
+        
+        //When finish spawn way
+        ObserverManager<EventID>.RegisterEvent(EventID.OnCompleteSpawnWay, param=>
+        {
+            SelectRandomEnemy();
+            m_CurrentTurn = GameTurn.PlayerTurn;
+            ObserverManager<GameTurn>.PostEvent(m_CurrentTurn);
+        });
+        PlayLevel();
+    }
+
+    public void ChangeTurn(GameTurn turn)
+    {
+        switch (turn)
+        {
+            case GameTurn.EmptyTimeTurn:
+                _GameTurn = turn;
+                break;
+            case GameTurn.PlayerTurn:
+                _GameTurn = turn;
+                break;
+            case GameTurn.EnemyTurn:
+                
+                break;
+            default:
+                Debug.LogError($"{this.GetType().Name}: Error change turn");
+                break;
+        }
+        ObserverManager<EventID>.PostEvent(EventID.TurnManager, turn);
     }
 
     private void HandleGameOver()
@@ -58,19 +93,6 @@ public class GameManager : Singleton<GameManager>
         PlayerPrefs.SetInt("IsLevelCompleted" + currentLevel.ToString(),1);
         PlayerPrefs.Save();
     }
-    
-    private void Start()
-    {
-        //When finish spawn way
-        ObserverManager<EventID>.RegisterEvent(EventID.OnCompleteSpawnWay, param=>
-        {
-            SelectRandomEnemy();
-            m_CurrentTurn = GameTurn.PlayerTurn;
-            ObserverManager<GameTurn>.PostEvent(m_CurrentTurn);
-        });
-        PlayLevel();
-    }
-
     public void TakeTurn()
     {
         m_CurrentTurn = (m_CurrentTurn == GameTurn.EnemyTurn ? GameTurn.PlayerTurn : GameTurn.EnemyTurn);
