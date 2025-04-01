@@ -177,10 +177,6 @@ public class SpawnBlock : Singleton<SpawnBlock>
     {
         // TODO: set type block?
     }
-    protected int GetRandom(int _maxID, object check = null)
-    {
-        return Random.Range(check != null ? - _maxID + 1 : 0, _maxID);
-    }
 
     protected BlockStats GetBlockStats()
     {
@@ -189,5 +185,9 @@ public class SpawnBlock : Singleton<SpawnBlock>
         newBlockStats.width = GetRandom(maxSizeBlock) + 1;
         newBlockStats.index = newBlockStats.height == 1 || newBlockStats.width == 1 ? 1 : GetRandom(1 + (newBlockStats.height >= newBlockStats.width ? newBlockStats.height : newBlockStats.width), -1);
         return newBlockStats;
+    }
+    protected int GetRandom(int _maxID, object check = null)
+    {
+        return Random.Range(check != null ? - _maxID + 1 : 0, _maxID);
     }
 }

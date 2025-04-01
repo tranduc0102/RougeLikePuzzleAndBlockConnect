@@ -104,12 +104,12 @@ public class EnemyStats : ActorStats
     protected override IEnumerator HandleDead()
     {
         animator.SetBool("Die", true);
+        SpawnEnemy.Instance._currentEnemies.Remove(transform);
         yield return new WaitForSeconds(timeDespawn);
         //use pooling later
         GameObject enemyDieObj = Instantiate(_enemyDie, transform.position, Quaternion.identity);
         enemyDieObj.transform.DOScale(Vector3.zero, 2f).From();
         enemyDieObj.transform.SetParent(transform.parent);
-        SpawnEnemy.Instance._currentEnemies.Remove(transform);
         gameObject.SetActive(false);
         for (int i = 0; i < transform.parent.childCount; ++i)
         {
