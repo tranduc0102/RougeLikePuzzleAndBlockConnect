@@ -26,17 +26,21 @@ namespace UIGame
         }
         public void Setting()
         {
-            ShowDisplay(false, null, ()=>  UIController.Instance.UISetting.ShowDisplay(true));
+            //ShowDisplay(false, null );
+            _canvasGroup.gameObject.SetActive(false);
+            UIController.Instance.UISetting.ShowDisplay(true);
         }
 
         public void Continue()
         {
+            Time.timeScale = 1;
             ShowDisplay(false, null,_actionContinue);
             UIController.Instance.UIInGame.ShowDisplay(true);
         }
 
         public void Restart()
         {
+            Time.timeScale = 1;
             ShowDisplay(false, null, _actionRestart);
             UIController.Instance.UIInGame.ShowDisplay(true);
             StartCoroutine(ReloadScene());
@@ -44,6 +48,7 @@ namespace UIGame
 
         public void GiveUp()
         {
+            Time.timeScale = 1;
             ShowDisplay(false, null,_actionGiveUp);
             UIController.Instance.UIInGame.ShowDisplay(false);
             UIController.Instance.UISelectLevel.ShowDisplay(true);

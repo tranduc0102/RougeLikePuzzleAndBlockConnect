@@ -44,6 +44,7 @@ public class BoardManager : MonoBehaviour
     {
         ObserverManager<Gameplay>.RemoveEvent(Gameplay.checkInsertBlock, param => AddBlockOnCell((Transform) param));
         ObserverManager<Gameplay>.RemoveEvent(Gameplay.addBlockDontUse, param => AddBlockDontUse((Transform) param));
+        ObserverManager<Gameplay>.RemoveAllEvent();
     }
     private void SetupData()
     {

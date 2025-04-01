@@ -31,6 +31,7 @@ public class CameraManager : MonoBehaviour
                 Debug.LogError($"{this.GetType().Name}: Error camera move event");
             }
         });
+        
     }
     private void OnDisable()
     {
@@ -45,6 +46,7 @@ public class CameraManager : MonoBehaviour
                 Debug.LogError($"{this.GetType().Name}: Error camera move event");
             }
         });
+        DOTween.Kill(transform);
     }
     private void CameraMove(float distance, float duration)
     {

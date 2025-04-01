@@ -38,6 +38,7 @@ public class EnvironmentManager : MonoBehaviour
                 Debug.LogError($"{this.GetType().Name}: Error registerEvent");
             }
         });
+        DOTween.Kill(transform);
     }
 
     private void Move(float distancePlayerRun, float timePlayerRun)

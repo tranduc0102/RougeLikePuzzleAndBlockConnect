@@ -17,6 +17,7 @@ public class ABlock : MonoBehaviour
     private bool isUse;
     private float valueBlock;
     private Stats statsBlock;
+    private Tween _tween;
     
     private void Awake()
     {
@@ -69,6 +70,7 @@ public class ABlock : MonoBehaviour
         ObserverManager<Gameplay>.RemoveEvent(Gameplay.moveToDefault, param => MoveToDefault());
         ObserverManager<Gameplay>.RemoveEvent(Gameplay.blockIsUse, param => IsUse((Transform) param));
         ObserverManager<Gameplay>.RemoveEvent(Gameplay.blockAddStats, param => AddStatsPlayer((Transform) param));
+        _tween?.Kill();
     }
 
     private void AddStatsPlayer(Transform target)
@@ -126,7 +128,7 @@ public class ABlock : MonoBehaviour
         {
             if (isSetDefault)
             {
-                transform.parent.DOMove(posDefault, moveSpeed * 6);
+                _tween = transform.parent.DOMove(posDefault, moveSpeed * 6);
             }
         }
     }
@@ -136,6 +138,7 @@ public class ABlock : MonoBehaviour
         target = Camera.main.ScreenToWorldPoint(target);
         target -= excess;
         target.z = -1f;
-        transform.parent.DOMove(target, moveSpeed);
+        _tween =   transform.parent.DOMove(target, moveSpeed);
     }
+    
 }

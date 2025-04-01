@@ -12,7 +12,7 @@ public class PlayerStats : ActorStats
     [SerializeField] private float timePlayerRun;
     [SerializeField] private int cntABlockErase;
     [SerializeField] private GameObject teleport;
-
+    
     private void Awake()
     {
         SetupPlayerData();
@@ -34,7 +34,7 @@ public class PlayerStats : ActorStats
         ObserverManager<EventID>.RemoveEvent(EventID.UpdateStatsPlayer, param => AddStats((Stats) param));
         ObserverManager<EventID>.RemoveEvent(EventID.SendCntBlockErase, param => ChangeCntABlockErase((int) param));
         ObserverManager<GameTurn>.RemoveEvent(GameTurn.PlayerTurn, param => AddStats((Stats) param));
-        
+        DOTween.Kill(transform);
     }
 
     protected void OnDestroy()

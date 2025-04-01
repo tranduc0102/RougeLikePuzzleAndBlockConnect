@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DesignPattern;
 using DesignPattern.Obsever;
+using DG.Tweening;
 using UIGame;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -60,6 +61,7 @@ public class GameManager : Singleton<GameManager>
     {
         ObserverManager<EventID>.RemoveEvent(EventID.Lose, _ => HandleGameOver());
         ObserverManager<EventID>.RemoveEvent(EventID.Win, _ => HandleWin());
+        
     }
     private void Start()
     {

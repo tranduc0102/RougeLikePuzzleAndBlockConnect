@@ -34,7 +34,7 @@ namespace UIGame
             ShowDisplay(false, null, actionReplay);
             StartCoroutine(ReloadScene());
 
-        }
+        }   
         private IEnumerator ReloadScene()
         {
             AsyncOperation unloadOp = SceneManager.UnloadSceneAsync("Scene_3_Gameplay");

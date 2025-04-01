@@ -32,7 +32,10 @@ namespace UIGame
 
         public void PauseGame()
         {
-            UIController.Instance.UIPause.ShowDisplay(true);
+            UIController.Instance.UIPause.ShowDisplay(true,() =>
+            {
+                Time.timeScale = 0;
+            });
         }
     }
 }
