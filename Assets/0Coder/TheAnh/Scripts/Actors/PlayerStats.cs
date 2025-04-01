@@ -7,14 +7,15 @@ using UnityEngine;
 
 public class PlayerStats : ActorStats
 {
-    [SerializeField] private DataPlayer _dataPlayer;
+    [SerializeField] private PlayerData _PlayerData;
     [SerializeField] private float distancePlayerRun;
     [SerializeField] private float timePlayerRun;
     [SerializeField] private int cntABlockErase;
+    [SerializeField] private GameObject teleport;
 
     private void Awake()
     {
-        SetupDataPlayer();
+        SetupPlayerData();
     }
 
     protected void OnEnable()
@@ -34,15 +35,16 @@ public class PlayerStats : ActorStats
         ObserverManager<EventID>.RemoveEvent(EventID.SendCntBlockErase, param => ChangeCntABlockErase((int) param));
         ObserverManager<GameTurn>.RemoveEvent(GameTurn.PlayerTurn, param => AddStats((Stats) param));
     }
-    private void SetupDataPlayer()
+    private void SetupPlayerData()
     {
-        _dataPlayer = Resources.Load<DataPlayer>("ScriptTableObject/DataPlayer");
-        m_ActorStats = _dataPlayer.stats;
-        distancePlayerRun = _dataPlayer.distancePlayerRun;
-        timePlayerRun = _dataPlayer.timePlayerRun;
+        _PlayerData = Resources.Load<PlayerData>("ScriptTableObject/Player Data");
+        m_ActorStats = _PlayerData.stats;
+        distancePlayerRun = _PlayerData.distancePlayerRun;
+        timePlayerRun = _PlayerData.timePlayerRun;
         animator = gameObject.GetComponent<Animator>();
-        timeSpawn = _dataPlayer.timeSpawn;
-        timeDespawn = _dataPlayer.timeDespawn;
+        timeSpawn = _PlayerData.timeSpawn;
+        timeDespawn = _PlayerData.timeDespawn;
+        teleport =  _PlayerData.teleport;
     }
     private void TurnManager(GameTurn turn)
     {
@@ -50,6 +52,9 @@ public class PlayerStats : ActorStats
         {
             case GameTurn.SpawnPlayer:
                 PlayerSpawn();
+                break;
+            case GameTurn.SpawnEnemy:
+
                 break;
             case GameTurn.EmptyTimeTurn:
                 PlayerRun();
@@ -72,8 +77,12 @@ public class PlayerStats : ActorStats
     private IEnumerator PlayerSpawner()
     {
         transform.DOScale(Vector3.zero, timeSpawn).From();
+        GameObject tele = Instantiate(teleport, transform.position, Quaternion.identity);
+        tele.transform.DOScale(Vector3.zero, timeSpawn).From();
         yield return new WaitForSeconds(timeSpawn);
         Debug.Log($"{this.GetType().Name}: Player spawn done");
+        // TODO: Turn off teleport
+        tele.SetActive(false);
         GameManager.Instance.ChangeTurn(GameTurn.EmptyTimeTurn);
     }
     private void PlayerRun()
@@ -88,8 +97,7 @@ public class PlayerStats : ActorStats
         ObserverManager<EventID>.PostEvent(EventID.PlayerMove, (distancePlayerRun, timePlayerRun));
         yield return new WaitForSeconds(timePlayerRun);
         animator.SetBool("Run", false);
-        ObserverManager<EventID>.PostEvent(EventID.SpawnNextWay);
-        GameManager.Instance.ChangeTurn(GameTurn.PlayerTurn);
+        GameManager.Instance.ChangeTurn(GameTurn.SpawnEnemy);
     }
     
     

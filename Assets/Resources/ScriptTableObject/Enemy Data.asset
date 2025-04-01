@@ -19,9 +19,9 @@ MonoBehaviour:
     PhysicalDamage: 20
     MagicalDamage: 25
     Armor: 50
-  - EnemyPrefab: {fileID: 0}
-    EnemyName: Slime
-    HealthPoint: 100
+  - EnemyPrefab: {fileID: 100050, guid: aad05534a7ba0dd49b8c54ce188308ec, type: 3}
+    EnemyName: Orc
+    HealthPoint: 500
     PhysicalDamage: 20
     MagicalDamage: 25
     Armor: 50
@@ -73,3 +73,9 @@ MonoBehaviour:
     PhysicalDamage: 20
     MagicalDamage: 25
     Armor: 50
+  PositionRight: 37
+  PositionUp: 12
+  teleport: {fileID: 6483818316777253924, guid: 24fa68732b3f2f64b90a27b40a2f2220, type: 3}
+  timeSpawn: 3
+  timeDespawn: 3
+  objEnemyDie: {fileID: 6541223971404623900, guid: 100d85b15e6446f43aa0c9bfb8dafbdd, type: 3}

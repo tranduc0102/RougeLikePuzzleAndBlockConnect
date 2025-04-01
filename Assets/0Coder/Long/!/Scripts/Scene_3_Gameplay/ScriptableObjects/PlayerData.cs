@@ -7,13 +7,14 @@ using UnityEngine.SceneManagement;
 using DesignPattern.Obsever;
 using DesignPattern.ObjectPool;
 
-[CreateAssetMenu(fileName = "DataPlayer", menuName = "ScriptableObjects/New DataPlayer")]
-public class DataPlayer : ScriptableObject
+[CreateAssetMenu(fileName = "Player Data", menuName = "ScriptableObjects/New Player Data")]
+public class PlayerData : ScriptableObject
 {
     [Header("Player Stats")]
     public Stats stats;
     public float timeSpawn;
     public float timeDespawn;
+    public GameObject teleport;
     
     [Header("Player on Empty Time Turn")]
     public float distancePlayerRun;

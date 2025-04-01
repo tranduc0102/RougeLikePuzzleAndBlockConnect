@@ -32,6 +32,10 @@ public class GameManager : Singleton<GameManager>
 {
     public GameTurn _GameTurn;
     public int currentLevel = 0;
+    public Transform _enemyTarget;
+    
+    
+    
     
     [SerializeField] private GameTurn m_CurrentTurn;
 
@@ -73,7 +77,7 @@ public class GameManager : Singleton<GameManager>
                 
                 break;
             case GameTurn.SpawnEnemy:
-                
+                WayManager.Instance.SpawnNextWay();
                 break;
             case GameTurn.EmptyTimeTurn:
                 

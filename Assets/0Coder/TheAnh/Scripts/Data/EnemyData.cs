@@ -6,6 +6,12 @@ using UnityEngine;
 public class EnemyData : ScriptableObject
 {
     public List<EnemyParam> Enemies;
+    public float PositionRight;
+    public float PositionUp;
+    public GameObject teleport;
+    public float timeSpawn;
+    public float timeDespawn;
+    public GameObject objEnemyDie;
 }
 
 [Serializable]
