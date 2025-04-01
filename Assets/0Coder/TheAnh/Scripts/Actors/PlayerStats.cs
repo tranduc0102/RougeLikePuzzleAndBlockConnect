@@ -34,7 +34,14 @@ public class PlayerStats : ActorStats
         ObserverManager<EventID>.RemoveEvent(EventID.UpdateStatsPlayer, param => AddStats((Stats) param));
         ObserverManager<EventID>.RemoveEvent(EventID.SendCntBlockErase, param => ChangeCntABlockErase((int) param));
         ObserverManager<GameTurn>.RemoveEvent(GameTurn.PlayerTurn, param => AddStats((Stats) param));
+        
     }
+
+    protected void OnDestroy()
+    {
+        StopAllCoroutines();
+    }
+
     private void SetupPlayerData()
     {
         _PlayerData = Resources.Load<PlayerData>("ScriptTableObject/Player Data");

@@ -80,9 +80,9 @@ namespace UIGame
             if (LevelManager.Instance.GetLevelStatus(id) > 0)
             {
                 Debug.Log($"Chơi Level {id}");
-                // UIController.Instance.UIInGame.ShowDisplay(true);
-                // UIController.Instance.UISelectLevel.ShowDisplay(false);
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+                UIController.Instance.UIInGame.ShowDisplay(true);
+                UIController.Instance.UISelectLevel.ShowDisplay(false);
+               SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1, LoadSceneMode.Additive);
             }
         }
 

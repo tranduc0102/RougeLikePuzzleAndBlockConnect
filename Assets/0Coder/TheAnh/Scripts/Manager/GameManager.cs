@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DesignPattern;
 using DesignPattern.Obsever;
+using UIGame;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
@@ -44,6 +45,11 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private List<EnemyStats> m_EnemyTracker;
 
     public EnemyStats EnemySelected;
+    protected override void Awake()
+    {
+        base.Awake();
+        base.KeepAlive(false);
+    }
 
     private void OnEnable()
     {
@@ -67,6 +73,12 @@ public class GameManager : Singleton<GameManager>
             ObserverManager<GameTurn>.PostEvent(m_CurrentTurn);
         });
         PlayLevel();
+    }
+
+    private void OnDestroy()
+    {
+        ObserverManager<EventID>.RemoveAllEvent();
+        ObserverManager<GameTurn>.RemoveAllEvent();
     }
 
     public void ChangeTurn(GameTurn turn)
@@ -110,11 +122,13 @@ public class GameManager : Singleton<GameManager>
     private void HandleGameOver()
     {
         // TODO: Xu ly game over
+        UIController.Instance.UILose.ShowDisplay(true);
         Debug.LogWarning("Game Over");
     }
 
     private void HandleWin()
     {
+        UIController.Instance.UIWin.ShowDisplay(true);
         PlayerPrefs.SetInt("IsLevelCompleted" + currentLevel.ToString(),1);
         PlayerPrefs.Save();
     }

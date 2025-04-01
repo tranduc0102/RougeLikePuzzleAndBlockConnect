@@ -14,9 +14,11 @@ namespace UIGame
         {
             if (enable)
             {
-                onShow?.Invoke();
                 _canvasGroup.gameObject.SetActive(true);
-                _canvasGroup.DOFade(1, 0.5f);
+                _canvasGroup.DOFade(1, 0.5f).OnComplete(delegate
+                {
+                    onShow?.Invoke();
+                });
             }
             else
             {
