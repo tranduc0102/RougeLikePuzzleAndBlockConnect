@@ -96,6 +96,7 @@ public class EnemyStats : ActorStats
         transform.DOMove(player.transform.position + Vector3.right * distancePlayerRun, 1f);
         yield return new WaitForSeconds(1f);
         animator.SetTrigger("Attack");
+        yield return new WaitForSeconds(0.2f);
         ObserverManager<GameTurn>.PostEvent(GameTurn.PlayerTurn, stats);
         yield return new WaitForSeconds(3f);
         transform.DOMove(tam, 1f, false);
