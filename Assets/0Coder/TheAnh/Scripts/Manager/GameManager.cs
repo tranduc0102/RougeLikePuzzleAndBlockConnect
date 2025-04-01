@@ -11,7 +11,9 @@ public enum GameTurn
 {
     EnemyTurn,
     PlayerTurn,
-    EmptyTimeTurn
+    EmptyTimeTurn,
+    SpawnPlayer,
+    SpawnEnemy
 }
 
 public enum EventID
@@ -28,7 +30,7 @@ public enum EventID
 
 public class GameManager : Singleton<GameManager>
 {
-    [FormerlySerializedAs("gameTurn")] public GameTurn _GameTurn;
+    public GameTurn _GameTurn;
     public int currentLevel = 0;
     
     [SerializeField] private GameTurn m_CurrentTurn;
@@ -50,7 +52,7 @@ public class GameManager : Singleton<GameManager>
     }
     private void Start()
     {
-        ChangeTurn(GameTurn.EmptyTimeTurn);
+        ChangeTurn(GameTurn.SpawnPlayer);
         
         //When finish spawn way
         ObserverManager<EventID>.RegisterEvent(EventID.OnCompleteSpawnWay, param=>
@@ -64,13 +66,20 @@ public class GameManager : Singleton<GameManager>
 
     public void ChangeTurn(GameTurn turn)
     {
+        _GameTurn = turn;
         switch (turn)
         {
+            case GameTurn.SpawnPlayer:
+                
+                break;
+            case GameTurn.SpawnEnemy:
+                
+                break;
             case GameTurn.EmptyTimeTurn:
-                _GameTurn = turn;
+                
                 break;
             case GameTurn.PlayerTurn:
-                _GameTurn = turn;
+                
                 break;
             case GameTurn.EnemyTurn:
                 

@@ -17,5 +17,7 @@ MonoBehaviour:
     PhysicalDamage: 15
     MagicalDamage: 10
     Armor: 10
+  timeSpawn: 3
+  timeDespawn: 3
   distancePlayerRun: 100
   timePlayerRun: 4

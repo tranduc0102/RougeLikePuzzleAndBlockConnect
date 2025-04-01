@@ -12,6 +12,8 @@ public class DataPlayer : ScriptableObject
 {
     [Header("Player Stats")]
     public Stats stats;
+    public float timeSpawn;
+    public float timeDespawn;
     
     [Header("Player on Empty Time Turn")]
     public float distancePlayerRun;

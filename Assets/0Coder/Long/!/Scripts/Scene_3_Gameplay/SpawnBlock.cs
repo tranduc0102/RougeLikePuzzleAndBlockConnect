@@ -11,15 +11,30 @@ public struct BlockStats
     public int height;
     public int width;
     public int index;
-
     public static bool operator ==(BlockStats a, BlockStats b)
     {
         return a.height == b.height && a.width == b.width && a.index == b.index;
     }
-
     public static bool operator !=(BlockStats a, BlockStats b)
     {
         return !(a == b);
+    }
+    public override bool Equals(object obj)
+    {
+        if (!(obj is BlockStats)) return false;
+        BlockStats other = (BlockStats)obj;
+        return this == other; 
+    }
+    public override int GetHashCode()
+    {
+        unchecked
+        {
+            int hash = 17;
+            hash = hash * 23 + height.GetHashCode();
+            hash = hash * 23 + width.GetHashCode();
+            hash = hash * 23 + index.GetHashCode();
+            return hash;
+        }
     }
 }
 public class SpawnBlock : Singleton<SpawnBlock>

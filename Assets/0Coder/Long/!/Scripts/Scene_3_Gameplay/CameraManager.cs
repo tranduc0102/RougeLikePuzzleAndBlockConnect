@@ -4,6 +4,7 @@ using System;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using DesignPattern.Obsever;
 using DG.Tweening;
 
 public class CameraManager : MonoBehaviour
@@ -19,10 +20,34 @@ public class CameraManager : MonoBehaviour
 
     private void OnEnable()
     {
-        if (player != null)
+        ObserverManager<EventID>.RegisterEvent(EventID.PlayerMove, param =>
         {
-            transform.DOMoveX(transform.position.x + 100f, 4f)
-                .SetEase(Ease.Linear);
-        }
+            if (param is (float distance, float duration))
+            {
+                CameraMove(distance, duration);
+            }
+            else
+            {
+                Debug.LogError($"{this.GetType().Name}: Error camera move event");
+            }
+        });
+    }
+    private void OnDisable()
+    {
+        ObserverManager<EventID>.RemoveEvent(EventID.PlayerMove, param =>
+        {
+            if (param is (float distance, float duration))
+            {
+                CameraMove(distance, duration);
+            }
+            else
+            {
+                Debug.LogError($"{this.GetType().Name}: Error camera move event");
+            }
+        });
+    }
+    private void CameraMove(float distance, float duration)
+    {
+        transform.DOMoveX(transform.position.x + distance, duration).SetEase(Ease.Linear);
     }
 }

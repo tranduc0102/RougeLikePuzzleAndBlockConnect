@@ -41,11 +41,16 @@ public class PlayerStats : ActorStats
         distancePlayerRun = _dataPlayer.distancePlayerRun;
         timePlayerRun = _dataPlayer.timePlayerRun;
         animator = gameObject.GetComponent<Animator>();
+        timeSpawn = _dataPlayer.timeSpawn;
+        timeDespawn = _dataPlayer.timeDespawn;
     }
     private void TurnManager(GameTurn turn)
     {
         switch (turn)
         {
+            case GameTurn.SpawnPlayer:
+                PlayerSpawn();
+                break;
             case GameTurn.EmptyTimeTurn:
                 PlayerRun();
                 break;
@@ -59,6 +64,17 @@ public class PlayerStats : ActorStats
                 Debug.LogError($"{this.GetType().Name}: Error TurnManager");
                 break;
         }
+    }
+    private void PlayerSpawn()
+    {
+        StartCoroutine(PlayerSpawner());
+    }
+    private IEnumerator PlayerSpawner()
+    {
+        transform.DOScale(Vector3.zero, timeSpawn).From();
+        yield return new WaitForSeconds(timeSpawn);
+        Debug.Log($"{this.GetType().Name}: Player spawn done");
+        GameManager.Instance.ChangeTurn(GameTurn.EmptyTimeTurn);
     }
     private void PlayerRun()
     {
@@ -109,9 +125,6 @@ public class PlayerStats : ActorStats
                 isAttack.Armor = m_ActorStats.Armor * -1;
                 isAttack.HealthPoint = stats.MagicalDamage + stats.PhysicalDamage + isAttack.Armor;
             }
-            // print(stats.MagicalDamage + stats.PhysicalDamage);
-            // print(isAttack.HealthPoint);
-            // print(isAttack.Armor);
             base.AddStats(isAttack);
             GameManager.Instance._GameTurn = GameTurn.PlayerTurn;
         }
