@@ -1,5 +1,6 @@
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using DesignPattern;
 using DesignPattern.Obsever;
@@ -23,9 +24,9 @@ public enum EventID
     Lose,
     SendCntBlockErase,
     UpdateStatsPlayer,
-    SpawnNextWay,
     OnCompleteSpawnWay,
-    PlayerMove
+    PlayerMove,
+    EnemyAttack
 }
 
 public class GameManager : Singleton<GameManager>
@@ -86,7 +87,7 @@ public class GameManager : Singleton<GameManager>
                 
                 break;
             case GameTurn.EnemyTurn:
-                
+                StartCoroutine(EnemyAttackPlayer());
                 break;
             default:
                 Debug.LogError($"{this.GetType().Name}: Error change turn");
@@ -94,7 +95,18 @@ public class GameManager : Singleton<GameManager>
         }
         ObserverManager<EventID>.PostEvent(EventID.TurnManager, turn);
     }
-
+    private IEnumerator EnemyAttackPlayer()
+    {
+        for (int i = 0; i < SpawnEnemy.Instance._currentEnemies.Count; ++i)
+        {
+            if (SpawnEnemy.Instance._currentEnemies[i].gameObject.activeSelf)
+            {
+                ObserverManager<EventID>.PostEvent(EventID.EnemyAttack, SpawnEnemy.Instance._currentEnemies[i]);
+                yield return new WaitForSeconds(SpawnEnemy.Instance.timeDelayAttackPlayer);
+            }
+        }
+        ChangeTurn(GameTurn.PlayerTurn);
+    }
     private void HandleGameOver()
     {
         // TODO: Xu ly game over

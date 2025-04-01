@@ -90,7 +90,7 @@ public class ABlock : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (isUse == false)
+        if (GameManager.Instance._GameTurn == GameTurn.PlayerTurn && isUse == false)
         {
             if (isSetDefault == false)
             {

@@ -79,3 +79,5 @@ MonoBehaviour:
   timeSpawn: 3
   timeDespawn: 3
   objEnemyDie: {fileID: 6541223971404623900, guid: 100d85b15e6446f43aa0c9bfb8dafbdd, type: 3}
+  timeDelayAttackPlayer: 5
+  distaceAttackPlayer: 13

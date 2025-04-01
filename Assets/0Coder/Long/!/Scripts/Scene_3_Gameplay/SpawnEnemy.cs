@@ -20,7 +20,8 @@ public class SpawnEnemy : Singleton<SpawnEnemy>
     [SerializeField] private float _positionUp;
     [SerializeField] private GameObject _teleport;
     [SerializeField] private float _timeSpawn;
-    [SerializeField] private List<Transform> _currentEnemies;
+    public List<Transform> _currentEnemies;
+    public float timeDelayAttackPlayer;
     
     private List<Transform> objDespawn = new List<Transform>();
     protected override void Awake()
@@ -36,6 +37,7 @@ public class SpawnEnemy : Singleton<SpawnEnemy>
         _teleport = _enemyData.teleport;
         _timeSpawn = _enemyData.timeSpawn;
         _currentEnemies = new List<Transform>();
+        timeDelayAttackPlayer = _enemyData.timeDelayAttackPlayer;
         player = GameObject.FindGameObjectWithTag("Player");
         if (player == null)
         {

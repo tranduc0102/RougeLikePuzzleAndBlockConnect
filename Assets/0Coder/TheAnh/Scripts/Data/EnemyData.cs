@@ -12,6 +12,8 @@ public class EnemyData : ScriptableObject
     public float timeSpawn;
     public float timeDespawn;
     public GameObject objEnemyDie;
+    public float timeDelayAttackPlayer;
+    public float distaceAttackPlayer;
 }
 
 [Serializable]

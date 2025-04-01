@@ -99,13 +99,10 @@ public class PlayerStats : ActorStats
         animator.SetBool("Run", false);
         GameManager.Instance.ChangeTurn(GameTurn.SpawnEnemy);
     }
-    
-    
     private void ChangeCntABlockErase(int newCntABlockErase)
     {
         cntABlockErase = newCntABlockErase;
     }
-
     protected override void AddStats(Stats stats)
     {
         if (GameManager.Instance._GameTurn == GameTurn.PlayerTurn)
@@ -140,9 +137,17 @@ public class PlayerStats : ActorStats
     
     protected void PlayerAttackEnemy(Stats stats)
     {
+        StartCoroutine(PlayerAttack(stats));
+    }
+
+    private IEnumerator PlayerAttack(Stats stats)
+    {
+        Vector3 tam = transform.position;
+        transform.DOMove(GameManager.Instance._enemyTarget.position - Vector3.right * 10f, 1f, false);
         animator.SetTrigger("Attack");
         ObserverManager<GameTurn>.PostEvent(GameTurn.EnemyTurn, stats);
-        
+        yield return new WaitForSeconds(1f);
+        transform.DOMove(tam, 1f, false);
     }
 
     protected override IEnumerator HandleDead()
