@@ -1,66 +1,72 @@
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using DesignPattern;
 using DesignPattern.Obsever;
+using DG.Tweening;
+using UIGame;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public enum GameTurn
 {
     EnemyTurn,
-    PlayerTurn
+    PlayerTurn,
+    EmptyTimeTurn,
+    SpawnPlayer,
+    SpawnEnemy
 }
 
 public enum EventID
 {
+    TurnManager,
     Win,
     Lose,
     SendCntBlockErase,
     UpdateStatsPlayer,
-    SpawnNextWay,
-    OnCompleteSpawnWay
+    OnCompleteSpawnWay,
+    PlayerMove,
+    EnemyAttack
 }
 
 public class GameManager : Singleton<GameManager>
 {
-    public GameTurn gameTurn;
+    public GameTurn _GameTurn;
+    public int currentLevel = 0;
+    public Transform _enemyTarget;
     
-    private int currentLevel = 0;
+    
+    
+    
     [SerializeField] private GameTurn m_CurrentTurn;
 
     [Header("Manage enemy")] 
     [SerializeField] private List<EnemyStats> m_EnemyTracker;
 
     public EnemyStats EnemySelected;
+    protected override void Awake()
+    {
+        base.Awake();
+        base.KeepAlive(false);
+    }
 
     private void OnEnable()
     {
-        gameTurn = GameTurn.PlayerTurn;
         ObserverManager<EventID>.RegisterEvent(EventID.Lose, _ => HandleGameOver());
         ObserverManager<EventID>.RegisterEvent(EventID.Win, _ => HandleWin());
     }
-
     private void OnDisable()
     {
         ObserverManager<EventID>.RemoveEvent(EventID.Lose, _ => HandleGameOver());
         ObserverManager<EventID>.RemoveEvent(EventID.Win, _ => HandleWin());
+        
     }
-
-    private void HandleGameOver()
-    {
-        // TODO: Xu ly game over
-        Debug.LogWarning("Game Over");
-    }
-
-    private void HandleWin()
-    {
-        PlayerPrefs.SetInt("IsLevelCompleted" + currentLevel.ToString(),1);
-        PlayerPrefs.Save();
-    }
-    
     private void Start()
     {
+        ChangeTurn(GameTurn.SpawnPlayer);
+        
         //When finish spawn way
         ObserverManager<EventID>.RegisterEvent(EventID.OnCompleteSpawnWay, param=>
         {
@@ -71,6 +77,63 @@ public class GameManager : Singleton<GameManager>
         PlayLevel();
     }
 
+    private void OnDestroy()
+    {
+        ObserverManager<EventID>.RemoveAllEvent();
+        ObserverManager<GameTurn>.RemoveAllEvent();
+    }
+
+    public void ChangeTurn(GameTurn turn)
+    {
+        _GameTurn = turn;
+        switch (turn)
+        {
+            case GameTurn.SpawnPlayer:
+                
+                break;
+            case GameTurn.SpawnEnemy:
+                WayManager.Instance.SpawnNextWay();
+                break;
+            case GameTurn.EmptyTimeTurn:
+                
+                break;
+            case GameTurn.PlayerTurn:
+                
+                break;
+            case GameTurn.EnemyTurn:
+                StartCoroutine(EnemyAttackPlayer());
+                break;
+            default:
+                Debug.LogError($"{this.GetType().Name}: Error change turn");
+                break;
+        }
+        ObserverManager<EventID>.PostEvent(EventID.TurnManager, turn);
+    }
+    private IEnumerator EnemyAttackPlayer()
+    {
+        for (int i = 0; i < SpawnEnemy.Instance._currentEnemies.Count; ++i)
+        {
+            if (SpawnEnemy.Instance._currentEnemies[i].gameObject.activeSelf)
+            {
+                ObserverManager<EventID>.PostEvent(EventID.EnemyAttack, SpawnEnemy.Instance._currentEnemies[i]);
+                yield return new WaitForSeconds(SpawnEnemy.Instance.timeDelayAttackPlayer);
+            }
+        }
+        ChangeTurn(GameTurn.PlayerTurn);
+    }
+    private void HandleGameOver()
+    {
+        // TODO: Xu ly game over
+        UIController.Instance.UILose.ShowDisplay(true);
+        Debug.LogWarning("Game Over");
+    }
+
+    private void HandleWin()
+    {
+        UIController.Instance.UIWin.ShowDisplay(true);
+        PlayerPrefs.SetInt("IsLevelCompleted" + currentLevel.ToString(),1);
+        PlayerPrefs.Save();
+    }
     public void TakeTurn()
     {
         m_CurrentTurn = (m_CurrentTurn == GameTurn.EnemyTurn ? GameTurn.PlayerTurn : GameTurn.EnemyTurn);

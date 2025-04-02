@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DesignPattern;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace UIGame
 {

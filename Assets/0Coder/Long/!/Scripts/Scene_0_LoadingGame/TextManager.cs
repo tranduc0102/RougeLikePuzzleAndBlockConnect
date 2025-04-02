@@ -1,0 +1,41 @@
+using System;
+using UnityEngine;
+using DG.Tweening;
+using TMPro;
+
+public class TextManager : MonoBehaviour
+{
+    [SerializeField] private RectTransform m_firstName;
+    [SerializeField] private RectTransform m_secondName;
+    private Tween m_tweener;
+
+    private void Awake()
+    {
+        FlexText(m_firstName, -500f, new Color {r = 0f, g = 0.8078431f, b = 0.8196079f, a = 1f});
+        FlexText(m_secondName, 500f, new Color {r = 0.5764706f, g = 0.4392157f, b = 0.8588235f, a = 1f});
+    }
+
+    private void OnDisable()
+    {
+        m_tweener?.Kill();
+    }
+
+    private void FlexText(RectTransform rect, float duration, Color color)
+    {
+        TMP_Text text = rect.gameObject.GetComponent<TMP_Text>();
+        m_tweener = rect.DOAnchorPosX(duration, 1.25f, false).From()
+            .OnComplete(() =>
+            {
+                rect.DOShakeScale(0.5f, Vector3.one * 1.25f, 10, 90f, true, ShakeRandomnessMode.Full)
+                    .OnComplete(() =>
+                    {
+                        text.DOFade(0f, 1f)
+                            .OnComplete(() =>
+                            {
+                                text.DOFade(1f, 1f);
+                                text.DOBlendableColor(color, 3f);
+                            });
+                    });
+            });
+    }
+}

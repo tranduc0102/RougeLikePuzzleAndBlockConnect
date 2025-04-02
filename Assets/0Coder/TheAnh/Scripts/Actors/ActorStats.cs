@@ -19,7 +19,9 @@ public struct Stats
 }
 public abstract class ActorStats : MonoBehaviour
 {
+    [Header("----- Auto set up data -----")]
     [SerializeField] protected Stats m_ActorStats;
+    [SerializeField] protected float timeSpawn;
     [SerializeField] protected float timeDespawn;
     [SerializeField] protected Animator animator;
 

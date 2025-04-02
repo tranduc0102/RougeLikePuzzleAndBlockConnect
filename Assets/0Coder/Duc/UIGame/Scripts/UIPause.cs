@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 namespace UIGame
 {
@@ -25,26 +26,42 @@ namespace UIGame
         }
         public void Setting()
         {
-            ShowDisplay(false, null, ()=>  UIController.Instance.UISetting.ShowDisplay(true));
+            //ShowDisplay(false, null );
+            _canvasGroup.gameObject.SetActive(false);
+            UIController.Instance.UISetting.ShowDisplay(true);
         }
 
         public void Continue()
         {
+            Time.timeScale = 1;
             ShowDisplay(false, null,_actionContinue);
             UIController.Instance.UIInGame.ShowDisplay(true);
         }
 
         public void Restart()
         {
+            Time.timeScale = 1;
             ShowDisplay(false, null, _actionRestart);
             UIController.Instance.UIInGame.ShowDisplay(true);
+            StartCoroutine(ReloadScene());
         }
 
         public void GiveUp()
         {
+            Time.timeScale = 1;
             ShowDisplay(false, null,_actionGiveUp);
             UIController.Instance.UIInGame.ShowDisplay(false);
             UIController.Instance.UISelectLevel.ShowDisplay(true);
+            SceneManager.UnloadSceneAsync("Scene_3_Gameplay");
+        } 
+        private IEnumerator ReloadScene() 
+        { 
+            AsyncOperation unloadOp = SceneManager.UnloadSceneAsync("Scene_3_Gameplay");
+            while (!unloadOp.isDone) 
+            { 
+                yield return null; 
+            } 
+            SceneManager.LoadScene("Scene_3_Gameplay", LoadSceneMode.Additive); 
         }
     }
 }

@@ -74,8 +74,31 @@ namespace UIGame
         }
         public void Close()
         {
+            
             ShowDisplay(false, null, _actionClosed);
+            
         }
-        
+
+        public override void ShowDisplay(bool enable, UnityAction onShow = null, UnityAction onClosed = null)
+        {
+            if (enable)
+            {
+                Time.timeScale = 1;
+                _canvasGroup.gameObject.SetActive(true);
+                _canvasGroup.alpha = 1;
+                Time.timeScale = 0;
+                
+                onShow?.Invoke();
+            }
+            else
+            {
+              
+                _canvasGroup.alpha = 0;
+                _canvasGroup.gameObject.SetActive(false);
+                Time.timeScale = 1;
+                onClosed?.Invoke();
+            }
+            
+        }
     }
 }

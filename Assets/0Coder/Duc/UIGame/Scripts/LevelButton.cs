@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 namespace UIGame
 {
@@ -81,6 +82,7 @@ namespace UIGame
                 Debug.Log($"Chơi Level {id}");
                 UIController.Instance.UIInGame.ShowDisplay(true);
                 UIController.Instance.UISelectLevel.ShowDisplay(false);
+               SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1, LoadSceneMode.Additive);
             }
         }
 
@@ -90,6 +92,7 @@ namespace UIGame
             if (isMainStage)
             {
                 forcus.SetActive(false);
+                UIController.Instance.UIWin.ShowDisplay(true);
             }
         }
     }
