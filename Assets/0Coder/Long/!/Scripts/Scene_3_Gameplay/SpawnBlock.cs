@@ -162,7 +162,7 @@ public class SpawnBlock : Singleton<SpawnBlock>
         // change position child
         for (int i = 0; i < block.transform.childCount; ++i)
         {
-            block.transform.GetChild(i).position += distanceBlock * 0.5f * (Vector3.up * (blockStats.height - 1) * -1 + Vector3.right * (blockStats.height >= blockStats.width ? (blockStats.index >= 0 ? -1 : 1) * (blockStats.width - 1) : (Math.Abs(blockStats.index) - 0.5f - blockStats.width / 2f) * 2f));
+            block.transform.GetChild(i).position += distanceBlock * 0.5f * (Vector3.up * (blockStats.height - 1) * -1 + Vector3.right * (blockStats.index == 0 ? -1 * (blockStats.width - 1) : (blockStats.height >= blockStats.width ? (blockStats.index >= 0 ? -1 : 1) * (blockStats.width - 1) : (Math.Abs(blockStats.index) - 0.5f - blockStats.width / 2f) * 2f)));
         }
         if (idPos != null)
         {

@@ -5,9 +5,15 @@ using UnityEngine.SceneManagement;
 
 public class ButtonManager : MonoBehaviour
 {
+    private Tween m_tweener;
+    private void OnDisable()
+    {
+        m_tweener?.Kill();
+    }
+
     public void OnClickTween(RectTransform rect)
     {
-        rect.DOScale(rect.localScale * 1.25f, 0.25f).SetLoops(2, LoopType.Yoyo);
+        m_tweener = rect.DOScale(rect.localScale * 1.25f, 0.25f).SetLoops(2, LoopType.Yoyo);
     }
     
     public void ButtonSetting()
