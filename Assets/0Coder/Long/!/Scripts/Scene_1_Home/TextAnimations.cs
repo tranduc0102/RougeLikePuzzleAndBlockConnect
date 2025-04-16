@@ -8,14 +8,19 @@ public class TextAnimations : MonoBehaviour
 {
     private Queue<Tween> m_Tweens = new Queue<Tween>();
     
+    [Header("----- Auto Select -----")]
     [SerializeField] private RectTransform firstName;
     [SerializeField] private RectTransform secondName;
-
     [SerializeField] private Transform beforeFirstName;
     [SerializeField] private Transform beforeSecondName;
     
     private void Awake()
     {
+        firstName = transform.GetChild(0).gameObject.GetComponent<RectTransform>();
+        secondName = transform.GetChild(1).gameObject.GetComponent<RectTransform>();
+        beforeFirstName = transform.GetChild(2);
+        beforeSecondName = transform.GetChild(3);
+        
         NextAnimationText(firstName, beforeFirstName, 2f);
         NextAnimationText(secondName, beforeSecondName, 2f);
     }
@@ -25,11 +30,11 @@ public class TextAnimations : MonoBehaviour
         m_Tweens.Enqueue(rect.DOMove(beforePos.position, duration, false).From()
             .OnComplete(() =>
             {
-                rect.DOShakeScale(1f, Vector3.one * 1.2f, 10, 90f, true, ShakeRandomnessMode.Full)
+                m_Tweens.Enqueue(rect.DOShakeScale(1f, Vector3.one * 1.2f, 10, 90f, true, ShakeRandomnessMode.Full)
                     .OnComplete(() =>
                     {
-                        rect.DOShakeScale(2f, Vector3.one * 0.1f, 2, 90f, true, ShakeRandomnessMode.Full).SetLoops(-1, LoopType.Yoyo);
-                    });
+                        m_Tweens.Enqueue(rect.DOShakeScale(2f, Vector3.one * 0.1f, 2, 90f, true, ShakeRandomnessMode.Full).SetLoops(-1, LoopType.Yoyo));
+                    }));
             }));
     }
 

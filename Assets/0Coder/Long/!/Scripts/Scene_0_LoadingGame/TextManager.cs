@@ -32,16 +32,16 @@ public class TextManager : MonoBehaviour
         m_Tweens.Enqueue(rect.DOAnchorPosX(duration, 1.25f, false).From()
             .OnComplete(() =>
             {
-                rect.DOShakeScale(0.5f, Vector3.one * 1.25f, 10, 90f, true, ShakeRandomnessMode.Full)
+                m_Tweens.Enqueue(rect.DOShakeScale(0.5f, Vector3.one * 1.25f, 10, 90f, true, ShakeRandomnessMode.Full)
                     .OnComplete(() =>
                     {
-                        text.DOFade(0f, 1f)
+                        m_Tweens.Enqueue(text.DOFade(0f, 1f)
                             .OnComplete(() =>
                             {
-                                text.DOFade(1f, 1f);
-                                text.DOBlendableColor(color, 3f);
-                            });
-                    });
+                                m_Tweens.Enqueue(text.DOFade(1f, 1f));
+                                m_Tweens.Enqueue(text.DOBlendableColor(color, 3f));
+                            }));
+                    }));
             }));
     }
 }

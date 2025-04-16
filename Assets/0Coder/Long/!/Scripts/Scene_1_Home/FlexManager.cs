@@ -5,12 +5,19 @@ using DG.Tweening;
 
 public class FlexManager : MonoBehaviour
 {
-    [SerializeField] private GameObject enemy;
     private Queue<Tween> m_Tweens = new Queue<Tween>();
+    
+    [Header("----- Auto Select -----")]
+    [SerializeField] private GameObject enemy;
+    [SerializeField] private GameObject player;
 
     private void Awake()
     {
+        enemy = transform.GetChild(0).gameObject;
+        player = transform.GetChild(1).gameObject;
+        
         m_Tweens.Enqueue(enemy.transform.DOScale(Vector3.zero, 3f).From());
+        m_Tweens.Enqueue(player.transform.DOScale(Vector3.zero, 3f).From());
     }
 
     private void OnDisable()
