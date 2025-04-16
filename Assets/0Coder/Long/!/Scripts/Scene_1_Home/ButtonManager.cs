@@ -15,20 +15,23 @@ public class ButtonManager : MonoBehaviour
             m_Tweens.Dequeue()?.Kill();
         }
     }
-
-    public void OnClickTween(RectTransform rect)
-    {
-        m_Tweens.Enqueue(rect.DOScale(rect.localScale * 1.25f, 0.25f).SetLoops(2, LoopType.Yoyo));
-    }
     
     public void ButtonSetting()
     {
         
     }
 
-    public void ButtonPlay()
+    public void ButtonPlay(RectTransform rect)
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        m_Tweens.Enqueue(rect.DOScale(rect.localScale * 1.25f, 0.25f)
+            .OnComplete(() =>
+            {
+                m_Tweens.Enqueue(rect.DOScale(rect.lossyScale / 1.25f, 0.25f)
+                    .OnComplete(() =>
+                    {
+                        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+                    }));
+            }));
     }
 
     public void ButtonRank()
