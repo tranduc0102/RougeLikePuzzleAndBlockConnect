@@ -6,25 +6,30 @@ using DG.Tweening;
 
 public class ChangeBackground : MonoBehaviour
 {
+    private Queue<Tween> m_Tweens = new Queue<Tween>();
+    
     [SerializeField] private List<RectTransform> oldBackground;
     [SerializeField] private List<RectTransform> newBackground;
     [SerializeField] private float duration;
     [SerializeField] private float distance;
-    private Tween m_tween;
+    
     private void Awake()
     {
         foreach (RectTransform rect in oldBackground)
         {
-            m_tween = rect.DOAnchorPosX(-distance, duration);
+            m_Tweens.Enqueue(rect.DOAnchorPosX(-distance, duration));
         }
         foreach (RectTransform rect in newBackground)
         {
-            m_tween = rect.DOAnchorPosX(distance, duration).From();
+            m_Tweens.Enqueue(rect.DOAnchorPosX(distance, duration).From());
         }
     }
 
     private void OnDisable()
     {
-        m_tween?.Kill();
+        while (m_Tweens.Count > 0)
+        {
+            m_Tweens.Dequeue()?.Kill();
+        }
     }
 }

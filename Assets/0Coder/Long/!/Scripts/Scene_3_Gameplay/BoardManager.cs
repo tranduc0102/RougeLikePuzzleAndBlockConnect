@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 using UnityEngine;
@@ -18,6 +19,10 @@ public enum Gameplay
 
 public class BoardManager : MonoBehaviour
 {
+    private Queue<Tween> m_Tweens = new Queue<Tween>();
+    private Action<object> m_CheckInsertBlock;
+    private Action<object> m_AddBlockDontUse;
+    
     [Header("----- Auto set up data -----")]
     [SerializeField] private BoardData _boardData;
     [SerializeField] private int rowNumber;
@@ -35,16 +40,23 @@ public class BoardManager : MonoBehaviour
 
     private void OnEnable()
     {
-        ObserverManager<Gameplay>.RegisterEvent(Gameplay.checkInsertBlock, param => AddBlockOnCell((Transform) param));
-        ObserverManager<Gameplay>.RegisterEvent(Gameplay.addBlockDontUse, param => AddBlockDontUse((Transform) param));
+        m_CheckInsertBlock = param => AddBlockOnCell((Transform)param);
+        m_AddBlockDontUse = param => AddBlockDontUse((Transform)param);
+        
+        ObserverManager<Gameplay>.RegisterEvent(Gameplay.checkInsertBlock, m_CheckInsertBlock);
+        ObserverManager<Gameplay>.RegisterEvent(Gameplay.addBlockDontUse, m_AddBlockDontUse);
         CreateBoard();
     }
 
     private void OnDisable()
     {
-        ObserverManager<Gameplay>.RemoveEvent(Gameplay.checkInsertBlock, param => AddBlockOnCell((Transform) param));
-        ObserverManager<Gameplay>.RemoveEvent(Gameplay.addBlockDontUse, param => AddBlockDontUse((Transform) param));
-        ObserverManager<Gameplay>.RemoveAllEvent();
+        ObserverManager<Gameplay>.RemoveEvent(Gameplay.checkInsertBlock, m_CheckInsertBlock);
+        ObserverManager<Gameplay>.RemoveEvent(Gameplay.addBlockDontUse, m_AddBlockDontUse);
+
+        while (m_Tweens.Count > 0)
+        {
+            m_Tweens.Dequeue()?.Kill();
+        }
     }
     private void SetupData()
     {
@@ -166,7 +178,7 @@ public class BoardManager : MonoBehaviour
             obj = Physics2D.OverlapPoint(block.GetChild(i).position, layerMask, 0f).gameObject;
             newPos = obj.transform.position;
             newPos.z = -0.5f;
-            block.GetChild(i).DOMove(newPos, 0.2f);
+            m_Tweens.Enqueue(block.GetChild(i).DOMove(newPos, 0.2f));
             blocks[(int)((newPos.x - transform.GetChild(0).position.x) / distanceBlock)][(int)((newPos.y - transform.GetChild(0).position.y) / distanceBlock)] = block.GetChild(i);
         }
     }
@@ -257,13 +269,13 @@ public class BoardManager : MonoBehaviour
     
     private void SetAnimationBlock(Transform tmp)
     {
-        tmp.DOShakeScale(0.5f, 0.5f, 10, 90f, true, ShakeRandomnessMode.Full)
+        m_Tweens.Enqueue(tmp.DOShakeScale(0.5f, 0.5f, 10, 90f, true, ShakeRandomnessMode.Full)
             .OnComplete(() =>
             {
                 tmp.DOScale(Vector3.zero, 0.5f)
                     .SetEase(Ease.InExpo)
                     .OnComplete(() => tmp.gameObject.SetActive(false));
-            });
+            }));
     }
     
     private bool CheckRow(int row)

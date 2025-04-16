@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using DesignPattern.Obsever;
 using DG.Tweening;
@@ -7,6 +9,11 @@ using Random = UnityEngine.Random;
 
 public class ABlock : MonoBehaviour
 {
+    private Queue<Tween> m_Tweens = new Queue<Tween>();
+    private Action<object> m_MoveToDefault;
+    private Action<object> m_BlockIsUse;
+    private Action<object> m_BlockAddStats;
+    
     [SerializeField] private DataAllBlock dataAllBlock;
     private SpriteRenderer spriteRenderer;
     [SerializeField] private TypeBlock typeBlock;
@@ -17,7 +24,6 @@ public class ABlock : MonoBehaviour
     private bool isUse;
     private float valueBlock;
     private Stats statsBlock;
-    private Tween _tween;
     
     private void Awake()
     {
@@ -60,17 +66,25 @@ public class ABlock : MonoBehaviour
 
     private void OnEnable()
     {
-        ObserverManager<Gameplay>.RegisterEvent(Gameplay.moveToDefault, param => MoveToDefault());
-        ObserverManager<Gameplay>.RegisterEvent(Gameplay.blockIsUse, param => IsUse((Transform) param));
-        ObserverManager<Gameplay>.RegisterEvent(Gameplay.blockAddStats, param => AddStatsPlayer((Transform) param));
+        m_MoveToDefault = param => MoveToDefault();
+        m_BlockIsUse = param => IsUse((Transform)param);
+        m_BlockAddStats = param => AddStatsPlayer((Transform)param);
+        
+        ObserverManager<Gameplay>.RegisterEvent(Gameplay.moveToDefault, m_MoveToDefault);
+        ObserverManager<Gameplay>.RegisterEvent(Gameplay.blockIsUse, m_BlockIsUse);
+        ObserverManager<Gameplay>.RegisterEvent(Gameplay.blockAddStats, m_BlockAddStats);
     }
 
     private void OnDisable()
     {
-        ObserverManager<Gameplay>.RemoveEvent(Gameplay.moveToDefault, param => MoveToDefault());
-        ObserverManager<Gameplay>.RemoveEvent(Gameplay.blockIsUse, param => IsUse((Transform) param));
-        ObserverManager<Gameplay>.RemoveEvent(Gameplay.blockAddStats, param => AddStatsPlayer((Transform) param));
-        _tween?.Kill();
+        ObserverManager<Gameplay>.RemoveEvent(Gameplay.moveToDefault, m_MoveToDefault);
+        ObserverManager<Gameplay>.RemoveEvent(Gameplay.blockIsUse, m_BlockIsUse);
+        ObserverManager<Gameplay>.RemoveEvent(Gameplay.blockAddStats, m_BlockAddStats);
+
+        while (m_Tweens.Count > 0)
+        {
+            m_Tweens.Dequeue()?.Kill();
+        }
     }
 
     private void AddStatsPlayer(Transform target)
@@ -128,7 +142,7 @@ public class ABlock : MonoBehaviour
         {
             if (isSetDefault)
             {
-                _tween = transform.parent.DOMove(posDefault, moveSpeed * 6);
+                m_Tweens.Enqueue(transform.parent.DOMove(posDefault, moveSpeed * 6));
             }
         }
     }
@@ -138,7 +152,7 @@ public class ABlock : MonoBehaviour
         target = Camera.main.ScreenToWorldPoint(target);
         target -= excess;
         target.z = -1f;
-        _tween =   transform.parent.DOMove(target, moveSpeed);
+        m_Tweens.Enqueue(transform.parent.DOMove(target, moveSpeed));
     }
     
 }

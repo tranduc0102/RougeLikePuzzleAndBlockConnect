@@ -12,6 +12,8 @@ using DG.Tweening;
 
 public class SpawnEnemy : Singleton<SpawnEnemy>
 {
+    private Queue<Tween> m_Tweens = new Queue<Tween>();
+    
     [Header("----- Auto set up data -----")] 
     [SerializeField] private EnemyData _enemyData;
     [SerializeField] private int _level;
@@ -29,6 +31,15 @@ public class SpawnEnemy : Singleton<SpawnEnemy>
         base.Awake();
         SetupData();
     }
+
+    protected void OnDisable()
+    {
+        while (m_Tweens.Count > 0)
+        {
+            m_Tweens.Dequeue()?.Kill();
+        }
+    }
+
     private void SetupData()
     {
         _enemyData = Resources.Load<EnemyData>("ScriptTableObject/Enemy Data");
@@ -78,12 +89,12 @@ public class SpawnEnemy : Singleton<SpawnEnemy>
             ++idPos;
             _currentEnemies[_currentEnemies.Count - 1].SetParent(transform);
             _currentEnemies[_currentEnemies.Count - 1].localScale = Vector3.one * 7f;
-            _currentEnemies[_currentEnemies.Count - 1].DORotate(Vector3.up * -90f + Vector3.forward * 13f, 1f, RotateMode.Fast);
+            m_Tweens.Enqueue(_currentEnemies[_currentEnemies.Count - 1].DORotate(Vector3.up * -90f + Vector3.forward * 13f, 1f, RotateMode.Fast));
             _currentEnemies[_currentEnemies.Count - 1].gameObject.AddComponent<EnemyStats>()._idEnemy = _enemyInfor.EnemyId;
             objDespawn.Add(Instantiate(_teleport, _currentEnemies[_currentEnemies.Count - 1].position, Quaternion.identity).transform);
-            objDespawn[objDespawn.Count - 1].DOScale(Vector3.zero, _timeSpawn).From();
+            m_Tweens.Enqueue(objDespawn[objDespawn.Count - 1].DOScale(Vector3.zero, _timeSpawn).From());
             objDespawn[objDespawn.Count - 1].SetParent(transform);
-            _currentEnemies[_currentEnemies.Count - 1].DOScale(Vector3.zero, _timeSpawn).From();
+            m_Tweens.Enqueue(_currentEnemies[_currentEnemies.Count - 1].DOScale(Vector3.zero, _timeSpawn).From());
         }
         StartCoroutine(NextGameTurn());
     }

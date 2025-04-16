@@ -39,6 +39,8 @@ public struct BlockStats
 }
 public class SpawnBlock : Singleton<SpawnBlock>
 {
+    private Action<object> m_SpawnBlock;
+    
     [Header("----- Auto set up data -----")]
     [SerializeField] private SpawnBlockData spawnBlockData;
     [SerializeField] private GameObject aBlock; 
@@ -53,11 +55,13 @@ public class SpawnBlock : Singleton<SpawnBlock>
     }
     private void OnEnable()
     {
-        ObserverManager<Gameplay>.RegisterEvent(Gameplay.spawnBlock, param => StartSpawnBlock());
+        m_SpawnBlock = param => StartSpawnBlock();
+        
+        ObserverManager<Gameplay>.RegisterEvent(Gameplay.spawnBlock, m_SpawnBlock);
     }
     private void OnDisable()
     {
-        ObserverManager<Gameplay>.RemoveEvent(Gameplay.spawnBlock, param => StartSpawnBlock());
+        ObserverManager<Gameplay>.RemoveEvent(Gameplay.spawnBlock, m_SpawnBlock);
     }
     private void Start()
     {

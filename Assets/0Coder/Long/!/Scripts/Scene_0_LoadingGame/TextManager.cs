@@ -1,13 +1,16 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using TMPro;
 
 public class TextManager : MonoBehaviour
 {
+    private Queue<Tween> m_Tweens = new Queue<Tween>();
+    
     [SerializeField] private RectTransform m_firstName;
     [SerializeField] private RectTransform m_secondName;
-    private Tween m_tweener;
 
     private void Awake()
     {
@@ -17,13 +20,16 @@ public class TextManager : MonoBehaviour
 
     private void OnDisable()
     {
-        m_tweener?.Kill();
+        while (m_Tweens.Count > 0)
+        {
+            m_Tweens.Dequeue()?.Kill();
+        }
     }
 
     private void FlexText(RectTransform rect, float duration, Color color)
     {
         TMP_Text text = rect.gameObject.GetComponent<TMP_Text>();
-        m_tweener = rect.DOAnchorPosX(duration, 1.25f, false).From()
+        m_Tweens.Enqueue(rect.DOAnchorPosX(duration, 1.25f, false).From()
             .OnComplete(() =>
             {
                 rect.DOShakeScale(0.5f, Vector3.one * 1.25f, 10, 90f, true, ShakeRandomnessMode.Full)
@@ -36,6 +42,6 @@ public class TextManager : MonoBehaviour
                                 text.DOBlendableColor(color, 3f);
                             });
                     });
-            });
+            }));
     }
 }

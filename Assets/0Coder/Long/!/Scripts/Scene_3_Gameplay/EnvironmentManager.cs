@@ -11,9 +11,12 @@ using DG.Tweening;
 
 public class EnvironmentManager : MonoBehaviour
 {
+    private Queue<Tween> m_Tweens = new Queue<Tween>();
+    private Action<object> m_PlayerMove;
+    
     private void OnEnable()
     {
-        ObserverManager<EventID>.RegisterEvent(EventID.PlayerMove, param =>
+        m_PlayerMove = param =>
         {
             if (param is (float distancePlayerRun, float timePlayerRun))
             {
@@ -23,26 +26,22 @@ public class EnvironmentManager : MonoBehaviour
             {
                 Debug.LogError($"{this.GetType().Name}: Error registerEvent");
             }
-        });
+        };
+        
+        ObserverManager<EventID>.RegisterEvent(EventID.PlayerMove, m_PlayerMove);
     }
     private void OnDisable()
     {
-        ObserverManager<EventID>.RemoveEvent(EventID.PlayerMove, param =>
+        ObserverManager<EventID>.RemoveEvent(EventID.PlayerMove, m_PlayerMove);
+        
+        while (m_Tweens.Count > 0)
         {
-            if (param is (float distancePlayerRun, float timePlayerRun))
-            {
-                Move(distancePlayerRun, timePlayerRun);
-            }
-            else
-            {
-                Debug.LogError($"{this.GetType().Name}: Error registerEvent");
-            }
-        });
-        DOTween.Kill(transform);
+            m_Tweens.Dequeue()?.Kill();
+        }
     }
 
     private void Move(float distancePlayerRun, float timePlayerRun)
     {
-        transform.DOMoveX(transform.position.x +distancePlayerRun, timePlayerRun).SetEase(Ease.Linear);
+        m_Tweens.Enqueue(transform.DOMoveX(transform.position.x +distancePlayerRun, timePlayerRun).SetEase(Ease.Linear));
     }
 }

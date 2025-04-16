@@ -1,19 +1,24 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class ButtonManager : MonoBehaviour
 {
-    private Tween m_tweener;
+    private Queue<Tween> m_Tweens = new Queue<Tween>();
     private void OnDisable()
     {
-        m_tweener?.Kill();
+        while (m_Tweens.Count > 0)
+        {
+            m_Tweens.Dequeue()?.Kill();
+        }
     }
 
     public void OnClickTween(RectTransform rect)
     {
-        m_tweener = rect.DOScale(rect.localScale * 1.25f, 0.25f).SetLoops(2, LoopType.Yoyo);
+        m_Tweens.Enqueue(rect.DOScale(rect.localScale * 1.25f, 0.25f).SetLoops(2, LoopType.Yoyo));
     }
     
     public void ButtonSetting()
