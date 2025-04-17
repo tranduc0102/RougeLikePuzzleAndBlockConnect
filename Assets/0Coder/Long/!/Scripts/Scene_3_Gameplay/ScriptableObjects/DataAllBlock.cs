@@ -12,7 +12,7 @@ public enum TypeBlock
 public struct DataBlock
 {
     public TypeBlock typeBlock;
-    public Color colorBlock;
+    public Sprite sprite;
     public float valueBlock;
 }
 

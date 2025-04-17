@@ -60,7 +60,7 @@ public class ABlock : MonoBehaviour
     private void InitBlock(int id)
     {
         typeBlock = dataAllBlock.blocks[id].typeBlock;
-        spriteRenderer.color = dataAllBlock.blocks[id].colorBlock;
+        spriteRenderer.sprite = dataAllBlock.blocks[id].sprite;
         valueBlock = dataAllBlock.blocks[id].valueBlock;
     }
 
