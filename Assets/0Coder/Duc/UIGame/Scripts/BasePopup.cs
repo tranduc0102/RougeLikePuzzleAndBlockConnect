@@ -14,11 +14,12 @@ namespace UIGame
         {
             if (enable)
             {
+                Time.timeScale = 0f;
                 _canvasGroup.gameObject.SetActive(true);
                 _canvasGroup.DOFade(1, timeShow).OnComplete(delegate
                 {
                     onShow?.Invoke();
-                });
+                }).SetUpdate(true);
             }
             else
             {
@@ -26,7 +27,7 @@ namespace UIGame
                 {
                     _canvasGroup.gameObject.SetActive(false);
                     onClosed?.Invoke();
-                });
+                }).SetUpdate(true);
             }
         }
     }
