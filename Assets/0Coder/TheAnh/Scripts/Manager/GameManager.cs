@@ -33,6 +33,9 @@ public enum EventID
 
 public class GameManager : Singleton<GameManager>
 {
+    private Action<object> lose;
+    private Action<object> win;
+    
     public GameTurn _GameTurn;
     public int currentLevel = 0;
     public Transform _enemyTarget;
@@ -54,13 +57,16 @@ public class GameManager : Singleton<GameManager>
 
     private void OnEnable()
     {
-        ObserverManager<EventID>.RegisterEvent(EventID.Lose, _ => HandleGameOver());
-        ObserverManager<EventID>.RegisterEvent(EventID.Win, _ => HandleWin());
+        lose = _ => HandleGameOver();
+        win = _ => HandleWin();
+        
+        ObserverManager<EventID>.RegisterEvent(EventID.Lose, lose);
+        ObserverManager<EventID>.RegisterEvent(EventID.Win, win);
     }
     private void OnDisable()
     {
-        ObserverManager<EventID>.RemoveEvent(EventID.Lose, _ => HandleGameOver());
-        ObserverManager<EventID>.RemoveEvent(EventID.Win, _ => HandleWin());
+        ObserverManager<EventID>.RemoveEvent(EventID.Lose, lose);
+        ObserverManager<EventID>.RemoveEvent(EventID.Win, win);
         
     }
     private void Start()

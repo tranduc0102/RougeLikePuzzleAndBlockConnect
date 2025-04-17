@@ -7,6 +7,9 @@ using System.Collections.Generic;
 
 public class EnemyStats : ActorStats
 {
+    private Action<object> enableTurnEnemy;
+    private Action<object> allEnemyAttack;
+    
     [SerializeField] private EnemyData _enemyData;
     [SerializeField] private GameObject _enemyDie;
     [SerializeField] private float timeDelayAttackPlayer;
@@ -18,13 +21,16 @@ public class EnemyStats : ActorStats
     }
     private void OnEnable()
     {
-        ObserverManager<GameTurn>.RegisterEvent(GameTurn.EnemyTurn, param => EnableTurnEnemy((Stats) param));
-        ObserverManager<EventID>.RegisterEvent(EventID.EnemyAttack, param => AllEnemyAttack((Transform) param));
+        enableTurnEnemy = param => EnableTurnEnemy((Stats)param);
+        allEnemyAttack = param => AllEnemyAttack((Transform)param);
+        
+        ObserverManager<GameTurn>.RegisterEvent(GameTurn.EnemyTurn, enableTurnEnemy);
+        ObserverManager<EventID>.RegisterEvent(EventID.EnemyAttack, allEnemyAttack);
     }
     private void OnDisable()
     {
-        ObserverManager<GameTurn>.RemoveEvent(GameTurn.EnemyTurn, param => EnableTurnEnemy((Stats) param));
-        ObserverManager<EventID>.RemoveEvent(EventID.EnemyAttack, param => AllEnemyAttack((Transform) param));
+        ObserverManager<GameTurn>.RemoveEvent(GameTurn.EnemyTurn, enableTurnEnemy);
+        ObserverManager<EventID>.RemoveEvent(EventID.EnemyAttack, allEnemyAttack);
     }
     private void SetupData()
     {
@@ -119,7 +125,7 @@ public class EnemyStats : ActorStats
                 break;
             }
         }
-        if (GameManager.Instance._enemyTarget == null || GameManager.Instance._enemyTarget.gameObject.activeSelf == false)
+        if (GameManager.Instance._enemyTarget == null || GameManager.Instance._enemyTarget.gameObject.activeSelf == false || SpawnEnemy.Instance._currentEnemies.Count == 0)
         {
             // TODO: Hết enemy nên chuyển sang way mới
             GameManager.Instance.ChangeTurn(GameTurn.EmptyTimeTurn);

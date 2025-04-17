@@ -7,6 +7,10 @@ using UnityEngine;
 
 public class PlayerStats : ActorStats
 {
+    private Action<object> turnManager;
+    private Action<object> addStats;
+    private Action<object> changeCntABlockErase;
+    
     [SerializeField] private PlayerData _PlayerData;
     [SerializeField] private float distancePlayerRun;
     [SerializeField] private float timePlayerRun;
@@ -20,20 +24,24 @@ public class PlayerStats : ActorStats
 
     protected void OnEnable()
     {
-        ObserverManager<EventID>.RegisterEvent(EventID.TurnManager, param => TurnManager((GameTurn) param));
+        turnManager = param => TurnManager((GameTurn) param);
+        addStats = param => AddStats((Stats)param);
+        changeCntABlockErase = param => ChangeCntABlockErase((int)param);
+        
+        ObserverManager<EventID>.RegisterEvent(EventID.TurnManager, turnManager);
         
         cntABlockErase = -1;
-        ObserverManager<EventID>.RegisterEvent(EventID.UpdateStatsPlayer, param => AddStats((Stats) param));
-        ObserverManager<EventID>.RegisterEvent(EventID.SendCntBlockErase, param => ChangeCntABlockErase((int) param));
-        ObserverManager<GameTurn>.RegisterEvent(GameTurn.PlayerTurn, param => AddStats((Stats) param));
+        ObserverManager<EventID>.RegisterEvent(EventID.UpdateStatsPlayer, addStats);
+        ObserverManager<EventID>.RegisterEvent(EventID.SendCntBlockErase, changeCntABlockErase);
+        ObserverManager<GameTurn>.RegisterEvent(GameTurn.PlayerTurn, addStats);
     }
     protected void OnDisable()
     {
-        ObserverManager<EventID>.RemoveEvent(EventID.TurnManager, param => TurnManager((GameTurn) param));
+        ObserverManager<EventID>.RemoveEvent(EventID.TurnManager, turnManager);
         
-        ObserverManager<EventID>.RemoveEvent(EventID.UpdateStatsPlayer, param => AddStats((Stats) param));
-        ObserverManager<EventID>.RemoveEvent(EventID.SendCntBlockErase, param => ChangeCntABlockErase((int) param));
-        ObserverManager<GameTurn>.RemoveEvent(GameTurn.PlayerTurn, param => AddStats((Stats) param));
+        ObserverManager<EventID>.RemoveEvent(EventID.UpdateStatsPlayer, addStats);
+        ObserverManager<EventID>.RemoveEvent(EventID.SendCntBlockErase, changeCntABlockErase);
+        ObserverManager<GameTurn>.RemoveEvent(GameTurn.PlayerTurn, addStats);
         DOTween.Kill(transform);
     }
 

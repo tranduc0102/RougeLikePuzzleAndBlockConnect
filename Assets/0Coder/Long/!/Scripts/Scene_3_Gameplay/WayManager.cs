@@ -29,9 +29,11 @@ public class WayManager : Singleton<WayManager>
     }
     public void SpawnNextWay()
     {
+        print("SpawnNextWay");
         if (_idCurrentWay >= _listEnemyInWay.Count)
         {
             Debug.LogWarning($"{this.GetType().Name}: Win game");
+            ObserverManager<EventID>.PostEvent(EventID.Win);
         }
         else
         {
