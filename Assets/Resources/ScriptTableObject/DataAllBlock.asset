@@ -14,15 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blocks:
   - typeBlock: 0
-    sprite: {fileID: 21300000, guid: 9185a6083a1f7014484794654355a303, type: 3}
+    sprite: {fileID: 21300000, guid: a05249bf195d4d746940f11dd3b8bddf, type: 3}
     valueBlock: 100
   - typeBlock: 1
-    sprite: {fileID: 21300000, guid: 34fb433350be77541bbaf2d41f239754, type: 3}
+    sprite: {fileID: 21300000, guid: fac7cc8f4184ae64688a245ea74040a3, type: 3}
     valueBlock: 20
   - typeBlock: 2
-    sprite: {fileID: 21300000, guid: f18403a8bda71454d8c2a79d673f33a0, type: 3}
+    sprite: {fileID: 21300000, guid: 5d492c2bc07de974e8a5dfa5c72102ab, type: 3}
     valueBlock: 15
   - typeBlock: 3
-    sprite: {fileID: 21300000, guid: c76ca3103e48b744383979ee69455455, type: 3}
+    sprite: {fileID: 21300000, guid: f3282a90690b4fe4a81a7c50a0f4930b, type: 3}
     valueBlock: 20
   moveSpeed: 0.1
