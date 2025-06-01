@@ -14,7 +14,6 @@ namespace UIGame
         {
             if (enable)
             {
-                Time.timeScale = 0f;
                 _canvasGroup.gameObject.SetActive(true);
                 _canvasGroup.DOFade(1, timeShow).OnComplete(delegate
                 {

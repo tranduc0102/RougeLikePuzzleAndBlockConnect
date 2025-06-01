@@ -1,4 +1,4 @@
-// Author: Dan_lang_A (DauHang)
+/*// Author: Dan_lang_A (DauHang)
 
 using System;
 using UnityEngine;
@@ -44,3 +44,4 @@ public class WayManager : Singleton<WayManager>
         }
     }
 }
+*/

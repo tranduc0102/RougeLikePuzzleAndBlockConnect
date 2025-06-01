@@ -8,7 +8,15 @@ public enum SoundType
 {
     InGame,
     SelectLevel,
-    LoadingScene
+    FXWin,
+    FXLose,
+    FXAttack,
+    FXHit,
+    FXSpawnEnemy,
+    FXMove,
+    FXConnect,
+    FXShowStar,
+    FXButtonClick
 }
 public class AudioManager : DesignPattern.Singleton<AudioManager>
 {
@@ -125,7 +133,14 @@ public class AudioManager : DesignPattern.Singleton<AudioManager>
             soundList[i].name = names[i];
         }
     }
-
+    public static void StopAudioMusic()
+    {
+        Instance.m_MusicSource.Stop();
+    }
+    public static void PlayContinueSound()
+    {
+        Instance.m_MusicSource.Play();
+    }
 
 }
 

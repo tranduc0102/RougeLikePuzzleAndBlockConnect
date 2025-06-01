@@ -21,9 +21,11 @@ MonoBehaviour:
         EnemyPosition: {x: 0, y: 0, z: 0}
       - EnemyId: 0
         EnemyPosition: {x: 0, y: 0, z: 0}
-  - Ways: []
-  - Ways: []
-  - Ways: []
-  - Ways: []
-  - Ways: []
-  - Ways: []
+  - Ways:
+    - Enemies:
+      - EnemyId: 1
+        EnemyPosition: {x: 0, y: 0, z: 0}
+      - EnemyId: 1
+        EnemyPosition: {x: 0, y: 0, z: 0}
+      - EnemyId: 1
+        EnemyPosition: {x: 0, y: 0, z: 0}

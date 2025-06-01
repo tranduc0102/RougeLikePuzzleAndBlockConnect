@@ -112,6 +112,8 @@ namespace UIGame
                 _label.DOLocalMoveY(originLabel, 0.8f);
                 _canvasGroup.gameObject.SetActive(true);
                 _canvasGroup.DOFade(1, timeShow).OnComplete(() => ShowStars(AmountStar));
+                AudioManager.PlaySFX(SoundType.FXWin);
+                AudioManager.StopAudioMusic();
             }
             else
             {
@@ -125,6 +127,7 @@ namespace UIGame
                         star.gameObject.SetActive(false);
                     }
                     onClosed?.Invoke();
+                    AudioManager.PlayContinueSound();
                 });
             }
         }
@@ -141,8 +144,17 @@ namespace UIGame
         public void SetActionNextLevel(UnityAction action) => _actionNextLevel = action;
         public void SetActionExit(UnityAction action) => _actionExit = action;
 
-        public void Replay() => ShowDisplay(false, null, _actionReplay);
-        public void NextLevel() => ShowDisplay(false, null, _actionNextLevel);
+        public void Replay()
+        {
+            AudioManager.PlaySFX(SoundType.FXButtonClick);
+            ShowDisplay(false, null, _actionReplay);
+        }
+        public void NextLevel()
+        {
+            AudioManager.PlaySFX(SoundType.FXButtonClick);
+            UIController.Instance.UISelectLevel.LevelButtons[LevelManager.Instance.CurrentLevel - 1].CompleteLevel();
+            ShowDisplay(false, null, _actionNextLevel);
+        }
         public void Exit() => ShowDisplay(false, null, _actionExit);
     }
 }

@@ -1,4 +1,4 @@
-using System;
+/*using System;
 using DesignPattern;
 using DesignPattern.Obsever;
 using UnityEngine;
@@ -45,4 +45,4 @@ public class InputManager : Singleton<InputManager>
         }
     }
     
-}
+}*/

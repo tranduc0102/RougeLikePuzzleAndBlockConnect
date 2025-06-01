@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using DesignPattern.Obsever;
 using DesignPattern.ObjectPool;
+using Duc;
 
 [CreateAssetMenu(fileName = "Player Data", menuName = "ScriptableObjects/New Player Data")]
 public class PlayerData : ScriptableObject

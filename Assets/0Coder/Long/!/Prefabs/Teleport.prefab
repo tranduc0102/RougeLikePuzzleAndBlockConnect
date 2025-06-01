@@ -28919,7 +28919,6 @@ GameObject:
   - component: {fileID: 2527309273946432187}
   - component: {fileID: 6328558475810079452}
   - component: {fileID: 7432635966329803821}
-  - component: {fileID: 6776299235507227967}
   m_Layer: 0
   m_Name: Teleport
   m_TagString: Untagged
@@ -33805,19 +33804,6 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &6776299235507227967
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5304441948582652659}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 800c8d1b3b0f62d478e19c9b4931505e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _sizeTeleporter: 0
 --- !u!1 &5756030736691819160
 GameObject:
   m_ObjectHideFlags: 0

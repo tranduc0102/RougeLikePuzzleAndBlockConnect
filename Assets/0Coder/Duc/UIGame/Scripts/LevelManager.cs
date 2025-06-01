@@ -11,6 +11,7 @@ namespace UIGame
         {
             return PlayerPrefs.GetInt(LevelKey + levelId, levelId == 1 ? 1 : 0);
         }
+        public int CurrentLevel = 0;
 
         public void UnlockLevels(List<int> levelIds)
         {

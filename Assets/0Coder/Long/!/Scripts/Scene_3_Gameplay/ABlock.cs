@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DesignPattern.Obsever;
 using DG.Tweening;
+using Duc;
 using TMPro;
 using Random = UnityEngine.Random;
 
@@ -106,7 +107,7 @@ public class ABlock : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (GameManager.Instance._GameTurn == GameTurn.PlayerTurn && isUse == false)
+        if (/*GameManager.Instance._GameTurn == GameTurn.PlayerTurn &&*/ isUse == false && GameManager.Instance.AmountMovementBlock > 0 && GameManager.Instance.IsTurnPlayer)
         {
             if (isSetDefault == false)
             {
@@ -120,12 +121,9 @@ public class ABlock : MonoBehaviour
 
     private void OnMouseDrag()
     {
-        if (GameManager.Instance._GameTurn == GameTurn.PlayerTurn)
+        if (/*GameManager.Instance._GameTurn == GameTurn.PlayerTurn &&*/ isUse == false && GameManager.Instance.AmountMovementBlock > 0 && GameManager.Instance.IsTurnPlayer)
         {
-            if (isUse == false)
-            {
-                Move(Input.mousePosition);
-            }
+            Move(Input.mousePosition);
         }
     }
     private void OnMouseUp()

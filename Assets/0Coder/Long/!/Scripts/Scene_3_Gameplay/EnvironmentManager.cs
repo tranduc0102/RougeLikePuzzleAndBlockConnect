@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 using DesignPattern.Obsever;
 using DesignPattern.ObjectPool;
 using DG.Tweening;
+using Duc;
 
 public class EnvironmentManager : MonoBehaviour
 {
@@ -27,13 +28,13 @@ public class EnvironmentManager : MonoBehaviour
                 Debug.LogError($"{this.GetType().Name}: Error registerEvent");
             }
         };
-        
-        ObserverManager<EventID>.RegisterEvent(EventID.PlayerMove, m_PlayerMove);
+
+        ObserverManager<StatePlayer>.RegisterEvent(StatePlayer.PlayerMove, m_PlayerMove);
     }
     private void OnDisable()
     {
-        ObserverManager<EventID>.RemoveEvent(EventID.PlayerMove, m_PlayerMove);
-        
+        ObserverManager<StatePlayer>.RemoveEvent(StatePlayer.PlayerMove, m_PlayerMove);
+
         while (m_Tweens.Count > 0)
         {
             m_Tweens.Dequeue()?.Kill();

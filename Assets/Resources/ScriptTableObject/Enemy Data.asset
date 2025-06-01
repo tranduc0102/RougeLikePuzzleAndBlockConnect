@@ -13,63 +13,15 @@ MonoBehaviour:
   m_Name: Enemy Data
   m_EditorClassIdentifier: 
   Enemies:
-  - EnemyPrefab: {fileID: 1931298151966786, guid: 928a1377c1cd4515b208fef3a396b8ea, type: 3}
-    EnemyName: Slime
+  - EnemyPrefab: {fileID: 5229413911957963823, guid: 3655d8a45d172674a82e527edb3cc10e, type: 3}
+    EnemyName: Goblin
     HealthPoint: 100
     PhysicalDamage: 20
     MagicalDamage: 25
     Armor: 50
-  - EnemyPrefab: {fileID: 100050, guid: aad05534a7ba0dd49b8c54ce188308ec, type: 3}
-    EnemyName: Orc
+  - EnemyPrefab: {fileID: 6469501824853495128, guid: 96ac836430f830e4aaa486db117da2d1, type: 3}
+    EnemyName: Mushroom
     HealthPoint: 500
-    PhysicalDamage: 20
-    MagicalDamage: 25
-    Armor: 50
-  - EnemyPrefab: {fileID: 0}
-    EnemyName: Slime
-    HealthPoint: 100
-    PhysicalDamage: 20
-    MagicalDamage: 25
-    Armor: 50
-  - EnemyPrefab: {fileID: 0}
-    EnemyName: Slime
-    HealthPoint: 100
-    PhysicalDamage: 20
-    MagicalDamage: 25
-    Armor: 50
-  - EnemyPrefab: {fileID: 0}
-    EnemyName: Slime
-    HealthPoint: 100
-    PhysicalDamage: 20
-    MagicalDamage: 25
-    Armor: 50
-  - EnemyPrefab: {fileID: 0}
-    EnemyName: Slime
-    HealthPoint: 100
-    PhysicalDamage: 20
-    MagicalDamage: 25
-    Armor: 50
-  - EnemyPrefab: {fileID: 0}
-    EnemyName: Slime
-    HealthPoint: 100
-    PhysicalDamage: 20
-    MagicalDamage: 25
-    Armor: 50
-  - EnemyPrefab: {fileID: 0}
-    EnemyName: Slime
-    HealthPoint: 100
-    PhysicalDamage: 20
-    MagicalDamage: 25
-    Armor: 50
-  - EnemyPrefab: {fileID: 0}
-    EnemyName: Slime
-    HealthPoint: 100
-    PhysicalDamage: 20
-    MagicalDamage: 25
-    Armor: 50
-  - EnemyPrefab: {fileID: 0}
-    EnemyName: Slime
-    HealthPoint: 100
     PhysicalDamage: 20
     MagicalDamage: 25
     Armor: 50

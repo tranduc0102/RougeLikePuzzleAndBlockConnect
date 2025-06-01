@@ -14,5 +14,10 @@ namespace UIGame
         public UIPause UIPause => FindObjectOfType<UIPause>();
         public UILose UILose => FindObjectOfType<UILose>();
         public UISelectLevel UISelectLevel => FindObjectOfType<UISelectLevel>();
+        public UIShowTurn UIShowTurn => FindObjectOfType<UIShowTurn>();
+        private void Start()
+        {
+            AudioManager.PlayBackGroundMusic(SoundType.SelectLevel);
+        }
     }
 }

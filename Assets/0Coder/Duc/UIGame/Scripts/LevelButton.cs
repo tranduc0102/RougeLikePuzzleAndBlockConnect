@@ -1,8 +1,9 @@
 using System;
-using UnityEngine;
-using UnityEngine.UI;
 using System.Collections.Generic;
+using System.Data;
+using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace UIGame
 {
@@ -15,29 +16,34 @@ namespace UIGame
         [SerializeField] private List<int> nextLevels; // Danh sách ID level tiếp theo
 
 
-        [Header("Setting")] 
+        [Header("Setting")]
         [SerializeField] private bool isMainStage;
 
         [SerializeField] private GameObject forcus;
         [SerializeField] private List<GameObject> _stars;
-        private void Start()
-        {
-            UpdateState();
-        }
-
         private void OnEnable()
         {
+            UpdateState();
+
             if (isMainStage)
             {
                 // Nếu nó là đường chính thì Update Stat, dùng Obsever
-              //UpdateStar
+                //UpdateStar
+                int x = PlayerPrefs.GetInt($"{id} + Star");
+                if (x > 0)
+                {
+                    for (int i = 0; i < PlayerPrefs.GetInt($"{id} + Star"); i++)
+                    {
+                        _stars[i].SetActive(true);
+                    }
+                }
             }
         }
 
         private void UpdateStar(int amountStar)
         {
             PlayerPrefs.SetInt($"{id} + Star", amountStar);
-            for (int i = 0; i < PlayerPrefs.GetInt($"{id} + Star", amountStar); i++)
+            for (int i = 0; i < PlayerPrefs.GetInt($"{id} + Star"); i++)
             {
                 _stars[i].SetActive(true);
             }
@@ -77,17 +83,22 @@ namespace UIGame
 
         public void OnLevelSelected()
         {
+            AudioManager.PlaySFX(SoundType.FXButtonClick);
             if (LevelManager.Instance.GetLevelStatus(id) > 0)
             {
                 Debug.Log($"Chơi Level {id}");
+                LevelManager.Instance.CurrentLevel = id;
                 UIController.Instance.UIInGame.ShowDisplay(true);
                 UIController.Instance.UISelectLevel.ShowDisplay(false);
-               SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1, LoadSceneMode.Additive);
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1, LoadSceneMode.Additive);
+                AudioManager.PlayBackGroundMusic(SoundType.InGame);
             }
         }
 
         public void CompleteLevel()
         {
+            UpdateStar(3);
+            LevelManager.Instance.CurrentLevel += 1;
             LevelManager.Instance.CompleteLevel(id, _typePath, nextLevels);
             if (isMainStage)
             {

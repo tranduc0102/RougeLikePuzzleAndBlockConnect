@@ -51,6 +51,7 @@ namespace UIGame
                 {
                     iconSound.sprite = iconOnSoundFX;
                 }
+                AudioManager.Instance.SfxVolumeRate = _sliderSoundFX.value;
             });
             
             _sliderMusic.onValueChanged.AddListener(delegate
@@ -64,6 +65,7 @@ namespace UIGame
                 {
                     iconMusic.sprite = iconOnMusic;
                 }
+                AudioManager.Instance.MusicVolumeRate = _sliderMusic.value;
             });
             
         }
@@ -74,7 +76,7 @@ namespace UIGame
         }
         public void Close()
         {
-            
+            AudioManager.PlaySFX(SoundType.FXButtonClick);
             ShowDisplay(false, null, _actionClosed);
             
         }
@@ -87,7 +89,7 @@ namespace UIGame
                 _canvasGroup.gameObject.SetActive(true);
                 _canvasGroup.alpha = 1;
                 Time.timeScale = 0;
-                
+             
                 onShow?.Invoke();
             }
             else

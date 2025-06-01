@@ -11,7 +11,18 @@ namespace UIGame
         private UnityAction _actionContinue;
         private UnityAction _actionRestart;
         private UnityAction _actionGiveUp;
-
+        public override void ShowDisplay(bool enable, UnityAction onShow = null, UnityAction onClosed = null)
+        {
+            base.ShowDisplay(enable, onShow, onClosed);
+            if (enable)
+            {
+                AudioManager.StopAudioMusic();
+            }
+            else
+            {
+                AudioManager.PlayContinueSound();
+            }
+        }
         public void SetActionContinue(UnityAction action)
         {
             _actionContinue = action;
@@ -26,6 +37,7 @@ namespace UIGame
         }
         public void Setting()
         {
+            AudioManager.PlaySFX(SoundType.FXButtonClick);
             //ShowDisplay(false, null );
             _canvasGroup.gameObject.SetActive(false);
             UIController.Instance.UISetting.ShowDisplay(true);
@@ -33,6 +45,7 @@ namespace UIGame
 
         public void Continue()
         {
+            AudioManager.PlaySFX(SoundType.FXButtonClick);
             Time.timeScale = 1;
             ShowDisplay(false, null,_actionContinue);
             UIController.Instance.UIInGame.ShowDisplay(true);
@@ -40,28 +53,30 @@ namespace UIGame
 
         public void Restart()
         {
+            AudioManager.PlaySFX(SoundType.FXButtonClick);
             Time.timeScale = 1;
             ShowDisplay(false, null, _actionRestart);
             UIController.Instance.UIInGame.ShowDisplay(true);
-            StartCoroutine(ReloadScene());
-        }
+/*            StartCoroutine(ReloadScene());
+*/        }
 
         public void GiveUp()
         {
+            AudioManager.PlaySFX(SoundType.FXButtonClick);
             Time.timeScale = 1;
             ShowDisplay(false, null,_actionGiveUp);
             UIController.Instance.UIInGame.ShowDisplay(false);
             UIController.Instance.UISelectLevel.ShowDisplay(true);
             SceneManager.UnloadSceneAsync("Scene_3_Gameplay");
         } 
-        private IEnumerator ReloadScene() 
+      /*  private IEnumerator ReloadScene() 
         { 
-            AsyncOperation unloadOp = SceneManager.UnloadSceneAsync("Scene_3_Gameplay");
+           *//* AsyncOperation unloadOp = SceneManager.UnloadSceneAsync("Scene_3_Gameplay");
             while (!unloadOp.isDone) 
             { 
                 yield return null; 
             } 
-            SceneManager.LoadScene("Scene_3_Gameplay", LoadSceneMode.Additive); 
-        }
+            SceneManager.LoadScene("Scene_3_Gameplay", LoadSceneMode.Additive); *//*
+        }*/
     }
 }

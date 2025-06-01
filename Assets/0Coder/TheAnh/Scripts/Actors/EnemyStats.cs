@@ -1,4 +1,4 @@
-using System;
+/*using System;
 using System.Collections;
 using DesignPattern.Obsever;
 using DG.Tweening;
@@ -135,4 +135,4 @@ public class EnemyStats : ActorStats
     {
         GameManager.Instance._enemyTarget = transform;
     }
-}
+}*/

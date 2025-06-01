@@ -19,6 +19,7 @@ namespace UIGame
                 {
                     onShow?.Invoke();
                 });
+                AudioManager.PlayBackGroundMusic(SoundType.InGame);
             }
             else
             {
@@ -32,6 +33,7 @@ namespace UIGame
 
         public void PauseGame()
         {
+            AudioManager.PlaySFX(SoundType.FXButtonClick);
             UIController.Instance.UIPause.ShowDisplay(true,() =>
             {
                 Time.timeScale = 0;

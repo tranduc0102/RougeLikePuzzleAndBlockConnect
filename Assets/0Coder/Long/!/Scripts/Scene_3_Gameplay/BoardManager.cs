@@ -6,6 +6,7 @@ using UnityEngine;
 using DesignPattern.Obsever;
 using DG.Tweening;
 using Vector3 = UnityEngine.Vector3;
+using Duc;
 
 public enum Gameplay
 {
@@ -37,7 +38,13 @@ public class BoardManager : MonoBehaviour
     {
         SetupData();
     }
+    private Action<object> resetHandler;
 
+    private void Start()
+    {
+        resetHandler = param => ResetBoard();
+        ObserverManager<EventID>.RegisterEvent(EventID.ResetGame, resetHandler);
+    }
     private void OnEnable()
     {
         m_CheckInsertBlock = param => AddBlockOnCell((Transform)param);
@@ -57,6 +64,7 @@ public class BoardManager : MonoBehaviour
         {
             m_Tweens.Dequeue()?.Kill();
         }
+        ObserverManager<EventID>.RemoveEvent(EventID.ResetGame, resetHandler);
     }
     private void SetupData()
     {
@@ -173,6 +181,7 @@ public class BoardManager : MonoBehaviour
         int n = block.childCount;
         GameObject obj;
         Vector3 newPos;
+        int check = 0;
         for (int i = 0; i < n; ++i)
         {
             obj = Physics2D.OverlapPoint(block.GetChild(i).position, layerMask, 0f).gameObject;
@@ -180,6 +189,11 @@ public class BoardManager : MonoBehaviour
             newPos.z = -0.5f;
             m_Tweens.Enqueue(block.GetChild(i).DOMove(newPos, 0.2f));
             blocks[(int)((newPos.x - transform.GetChild(0).position.x) / distanceBlock)][(int)((newPos.y - transform.GetChild(0).position.y) / distanceBlock)] = block.GetChild(i);
+            check++;
+            if(check == n)
+            {
+                GameManager.Instance.AmountMovementBlock -= 1;
+            }
         }
     }
     
@@ -256,9 +270,15 @@ public class BoardManager : MonoBehaviour
         }
         // TODO: Gửi số lượng a block bị xóa cho player stats để kiểm tra số lượng gửi đã đủ chưa
         ObserverManager<EventID>.PostEvent(EventID.SendCntBlockErase, removeRowAndColumn.Count);
+        int count = 0;
         foreach (Transform child in removeRowAndColumn)
         {
             AddStats(child);
+            count++;
+            if(count == removeRowAndColumn.Count)
+            {
+                AudioManager.PlaySFX(SoundType.FXConnect);
+            }
         }
     }
 
@@ -301,5 +321,45 @@ public class BoardManager : MonoBehaviour
         }
         return true;
     }
+    public void ResetBoard()
+    {
+        while (m_Tweens.Count > 0)
+        {
+            m_Tweens.Dequeue()?.Kill();
+        }
+
+        for (int i = 0; i < rowNumber; ++i)
+        {
+            for (int j = 0; j < columnNumber; ++j)
+            {
+                if (blocks[i][j] != null)
+                {
+                    blocks[i][j].gameObject.SetActive(false);
+                    blocks[i][j] = null;
+                }
+            }
+        }
+        foreach (var block in blockDontUse)
+        {
+            if (block != null)
+            {
+                block.gameObject.SetActive(false);
+            }
+        }
+        blockDontUse.Clear();
+
+        // Optionally: Xóa các block là con của bảng (nếu cần reset cứng)
+        // foreach (Transform child in transform)
+        // {
+        //     if (child.CompareTag("Block")) // giả sử các block gắn tag này
+        //     {
+        //         Destroy(child.gameObject);
+        //     }
+        // }
+        ObserverManager<Gameplay>.PostEvent(Gameplay.spawnBlock);
+
+        Debug.Log("Board has been reset.");
+    }
+
 
 }

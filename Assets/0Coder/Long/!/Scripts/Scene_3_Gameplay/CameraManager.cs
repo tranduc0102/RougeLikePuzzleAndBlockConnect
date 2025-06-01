@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DesignPattern.Obsever;
 using DG.Tweening;
+using Duc;
 
 public class CameraManager : MonoBehaviour
 {
@@ -34,13 +35,13 @@ public class CameraManager : MonoBehaviour
                 Debug.LogError($"{this.GetType().Name}: Error camera move event");
             }
         };
-        
-        ObserverManager<EventID>.RegisterEvent(EventID.PlayerMove, m_PlayerMove);
-        
+
+        ObserverManager<StatePlayer>.RegisterEvent(StatePlayer.PlayerMove, m_PlayerMove);
+
     }
     private void OnDisable()
     {
-        ObserverManager<EventID>.RemoveEvent(EventID.PlayerMove, m_PlayerMove);
+        ObserverManager<StatePlayer>.RemoveEvent(StatePlayer.PlayerMove, m_PlayerMove);
 
         while (m_Tweens.Count > 0)
         {

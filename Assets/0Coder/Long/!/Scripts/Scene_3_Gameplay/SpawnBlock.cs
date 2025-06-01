@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DesignPattern;
 using DesignPattern.ObjectPool;
 using DesignPattern.Obsever;
+using Duc;
 using UnityEngine;
 using Random = UnityEngine.Random;
 public struct BlockStats
@@ -48,6 +49,8 @@ public class SpawnBlock : Singleton<SpawnBlock>
     [SerializeField] private int maxSizeBlock;
     [SerializeField] private float distanceBlock;
     [SerializeField] private int countBlock;
+    private Action<object> resetHandler;
+
     protected override void Awake()
     {
         base.Awake();
@@ -56,12 +59,16 @@ public class SpawnBlock : Singleton<SpawnBlock>
     private void OnEnable()
     {
         m_SpawnBlock = param => StartSpawnBlock();
-        
+        resetHandler = param => ResetSpawnBlock();
+
+
         ObserverManager<Gameplay>.RegisterEvent(Gameplay.spawnBlock, m_SpawnBlock);
+        ObserverManager<EventID>.RegisterEvent(EventID.ResetGame, resetHandler);
     }
     private void OnDisable()
     {
         ObserverManager<Gameplay>.RemoveEvent(Gameplay.spawnBlock, m_SpawnBlock);
+        ObserverManager<EventID>.RemoveEvent(EventID.ResetGame, resetHandler);
     }
     private void Start()
     {
@@ -193,5 +200,13 @@ public class SpawnBlock : Singleton<SpawnBlock>
     protected int GetRandom(int _maxID, object check = null)
     {
         return Random.Range(check != null ? - _maxID + 1 : 0, _maxID);
+    }
+    public void ResetSpawnBlock()
+    {
+      /*  for (int i = transform.childCount - 1; i >= 0; i--)
+        {
+            Transform child = transform.GetChild(i);
+            Destroy(child.gameObject);
+        }*/
     }
 }

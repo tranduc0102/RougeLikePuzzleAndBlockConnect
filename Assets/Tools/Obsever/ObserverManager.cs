@@ -1,3 +1,4 @@
+using Duc;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -68,6 +69,11 @@ namespace DesignPattern.Obsever
                 return;
             }
             _events[eventID]?.Invoke(param);
+        }
+
+        internal static void RegisterEvent(EventID resetGame)
+        {
+            throw new NotImplementedException();
         }
     }
 }
