@@ -51,8 +51,16 @@ namespace Duc
             {
                 amountMovementBlock = value;
                 textAmountMove.text = amountMovementBlock.ToString();
+                if(amountMovementBlock == 0)
+                {
+                    foreach(Enemy enemy in allEnemyInWay)
+                    {
+                        enemy.ImgChoice.gameObject.SetActive(true);
+                    }
+                }
             }
         }
+        private bool checkChoice = false;
 
         private void Start()
         {
@@ -66,6 +74,7 @@ namespace Duc
             ObserverManager<EventID>.RegisterEvent(EventID.Win, param => Win());
             ObserverManager<EventID>.RegisterEvent(EventID.Lose, param => Lose());
             player.PlayerMove();
+            checkChoice = false;
 
         }
         private void OnDestroy()
@@ -74,11 +83,11 @@ namespace Duc
             ObserverManager<EventID>.RemoveEvent(EventID.Lose, param => Lose());
         }
 
-        public void EnemyTurn()
+        private void EnemyTurn()
         {
             if (allEnemyInWay.Any(e => e.Alive))
             {
-                StartTurnEnemy();
+                UIController.Instance.UIShowTurn.ShowTurn(false);
             }
             else
             {
@@ -95,14 +104,17 @@ namespace Duc
             }
         }
         int enemyIndex = 0;
-        private void StartTurnEnemy()
+        public void StartTurnEnemy()
         {
             if (IsTurnPlayer) return;
             if (enemyIndex >= allEnemyInWay.Count)
             {
                 enemyIndex = 0;
                 IsTurnPlayer = true;
-                UIController.Instance.UIShowTurn.ShowTurn(true);
+                if (player.Alive)
+                {
+                    UIController.Instance.UIShowTurn.ShowTurn(true);
+                }
                 return;
             }
             else
@@ -128,7 +140,8 @@ namespace Duc
                 {
                     AmountMovementBlock = 6;
                     IsTurnPlayer = false;
-                    UIController.Instance.UIShowTurn.ShowTurn(false);
+                    EnemyTurn();
+                    checkChoice = false;
                 });
             }
         }
@@ -139,16 +152,23 @@ namespace Duc
         }
         void Update()
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) && !checkChoice)
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
                 if (Physics.Raycast(ray, out RaycastHit hitInfo))
                 {
                     Enemy enemy = hitInfo.collider.GetComponent<Enemy>();
+                    foreach (Enemy enemy1 in allEnemyInWay)
+                    {
+                        if (enemy1 != enemy) { 
+                            enemy1.ImgChoice.gameObject.SetActive(false);
+                        }
+                    }
                     if (enemy != null)
                     {
                         GameManager.Instance.PlayerTurn(enemy);
+                        checkChoice = true;
                     }
                 }
             }
@@ -157,6 +177,7 @@ namespace Duc
         {
             ObserverManager<EventID>.PostEvent(EventID.ResetGame);
             IsTurnPlayer = false;
+            checkChoice = false;
             AmountMovementBlock = 6;
             TargetEnemy = null;
             if (player == null)

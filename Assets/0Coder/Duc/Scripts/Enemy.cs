@@ -6,14 +6,20 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Enemy : Actor
 {
     [SerializeField] private EnemyData _enemyData;
+    [SerializeField] private Image hp;
+    public Image ImgChoice;
     public int _idEnemy;
+    private float totalHP;
     private void OnEnable()
     {
         SetupData();
+        ImgChoice.gameObject.SetActive(false);
+        totalHP = m_ActorStats.HealthPoint + m_ActorStats.Armor;
     }
     private void SetupData()
     {
@@ -38,8 +44,9 @@ public class Enemy : Actor
     protected override void HandleDead()
     {
         animator.SetBool("Die", true);
-        DOVirtual.DelayedCall(1f, delegate
+        DOVirtual.DelayedCall(1.5f, delegate
         {
+            GameManager.Instance.AllEnemyOutWay.Remove(this);
             Destroy(this.gameObject);
         });
     }
@@ -58,6 +65,15 @@ public class Enemy : Actor
     public override void TargetReceiverDamage()
     {
         base.TargetReceiverDamage();
+    }
+    public override void ReceiveDamaged()
+    {
+        base.ReceiveDamaged();
+        hp.fillAmount = (m_ActorStats.HealthPoint + m_ActorStats.Armor) / totalHP;
+        if (ImgChoice)
+        {
+            ImgChoice.gameObject.SetActive(false);
+        }
     }
 
 }

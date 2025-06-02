@@ -96,7 +96,6 @@ namespace Duc
         protected virtual void Attack()
         {
             animator.SetTrigger("Attack");
-            damage = target.m_ActorStats.MagicalDamage + target.m_ActorStats.PhysicalDamage;
         }
         public virtual void TargetReceiverDamage()
         {
@@ -108,8 +107,7 @@ namespace Duc
         }
         public virtual void ReceiveDamaged()
         {
-            animator.SetTrigger("GetHit");
-            AudioManager.PlaySFX(SoundType.FXHit);
+            damage = target.m_ActorStats.MagicalDamage + target.m_ActorStats.PhysicalDamage;
             if (damage >= m_ActorStats.Armor) {
                 float tmpDamage = damage - m_ActorStats.Armor;
                 if (m_ActorStats.Armor > 0) {
@@ -133,7 +131,13 @@ namespace Duc
             {
                 m_ActorStats.HealthPoint = 0;
                 Alive = false;
+                AudioManager.PlaySFX(SoundType.FXHit);
                 HandleDead();
+            }
+            else
+            {
+                animator.SetTrigger("GetHit");
+                AudioManager.PlaySFX(SoundType.FXHit);
             }
         }
         public void SetTarget(Actor target)

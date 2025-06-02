@@ -9,7 +9,7 @@ using UnityEngine;
 public class UIShowTurn : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI TextMeshProUGUI;
-    [SerializeField] private Transform transform;
+    [SerializeField] private Transform transformX;
     public void ShowTurn(bool isTurnPlayer)
     {
         if (isTurnPlayer)
@@ -20,11 +20,11 @@ public class UIShowTurn : MonoBehaviour
         {
             TextMeshProUGUI.text = "Enemy Turn";
         }
-        transform.DOScaleX(2f, 1f).SetEase(Ease.Linear).OnComplete(delegate
+        transformX.DOScaleX(2f, 1f).SetEase(Ease.Linear).OnComplete(delegate
         {
             DOVirtual.DelayedCall(0.5f, delegate
             {
-                transform.DOScaleX(0f, 1f).SetEase(Ease.Linear).OnComplete(delegate
+                transformX.DOScaleX(0f, 1f).SetEase(Ease.Linear).OnComplete(delegate
                 {
                     if (isTurnPlayer)
                     {
@@ -32,7 +32,7 @@ public class UIShowTurn : MonoBehaviour
                     }
                     else
                     {
-                        GameManager.Instance.EnemyTurn();
+                        GameManager.Instance.StartTurnEnemy();
                     }
                 });
             });

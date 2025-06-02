@@ -44,6 +44,7 @@ public class Player : Actor
         teleport = _PlayerData.teleport;
         Alive = true;
         target = null;
+        animator.SetBool("Die", false);
         gameObject.SetActive(true);
     }
     private Action<object> addStats;
@@ -94,8 +95,11 @@ public class Player : Actor
 
     protected override void HandleDead()
     {
-        gameObject.SetActive(false);
-        ObserverManager<EventID>.PostEvent(EventID.Lose);
+        animator.SetBool("Die", true);
+        DOVirtual.DelayedCall(1.5f, delegate
+        {
+            ObserverManager<EventID>.PostEvent(EventID.Lose);
+        });
     }
 
     protected override void ProcessTurn(Action actionFinish)
